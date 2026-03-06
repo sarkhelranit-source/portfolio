@@ -3,7 +3,7 @@ services:
     image: httpd:2.4
     restart: always
     volumes:
-      - /home/ubuntu/stitch-project:/usr/local/apache2/htdocs/:ro
+      - /home/ubuntu/portfolio/dist:/usr/local/apache2/htdocs/:ro
     ports:
       - 8080:80
     container_name: portfolio
