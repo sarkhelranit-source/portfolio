@@ -30,7 +30,7 @@ export function About() {
             </p>
 
             <div className="flex flex-wrap gap-3">
-              {['AWS Services', 'Docker', 'Linux', 'n8n', 'Wazuh', 'Security'].map((tech, i) => (
+              {['AWS Services', 'Docker', 'Linux', 'n8n', 'Kubernetes', 'Git', 'Security'].map((tech, i) => (
                 <span
                   key={tech}
                   className="px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-sm text-zinc-300"
