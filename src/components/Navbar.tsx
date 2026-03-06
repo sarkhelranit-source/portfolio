@@ -1,6 +1,7 @@
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
-import { Menu, X, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import GooeyNav from '../../components/GooeyNav';
 
 export function Navbar() {
   const [isVisible, setIsVisible] = useState(false);
@@ -21,18 +22,18 @@ export function Navbar() {
       // Change background style after some scroll
       setIsScrolled(window.scrollY > 50);
     };
-    
+
     // Listen for resize to update visibility if screen changes
     const handleResize = () => {
-        if (window.innerWidth < 1024) setIsVisible(true);
-        else setIsVisible(window.scrollY > 100);
+      if (window.innerWidth < 1024) setIsVisible(true);
+      else setIsVisible(window.scrollY > 100);
     }
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
     return () => {
-        window.removeEventListener('scroll', handleScroll);
-        window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     }
   }, []);
 
@@ -45,65 +46,56 @@ export function Navbar() {
   ];
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: isVisible ? 0 : -100 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/50 py-4' : 'bg-transparent py-6'
-        }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-        <a href="#home" className="text-xl font-display font-bold tracking-tighter text-zinc-100">
-          RANIT<span className="text-emerald-500">.</span>
-        </a>
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: isVisible ? 0 : -100 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[90%] max-w-[800px] rounded-xl border ${isScrolled
+            ? 'top-4 bg-zinc-950/80 backdrop-blur-md border-zinc-800/50 shadow-lg py-2'
+            : 'top-8 bg-zinc-950/40 backdrop-blur-sm border-white/10 py-3'
+          }`}
+      >
+        <div className="flex items-center justify-between w-full px-4 md:px-6 h-[44px]">
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
-            >
-              {link.name}
+          {/* Left: Logo */}
+          <div className="flex-1 flex justify-start">
+            <a href="#home" className="text-xl font-display font-bold tracking-tighter text-zinc-100">
+              RANIT<span className="text-emerald-500">.</span>
             </a>
-          ))}
-          <a
-            href="#contact"
-            className="px-4 py-2 rounded-full bg-zinc-100 text-zinc-950 text-sm font-medium hover:bg-zinc-300 transition-colors"
-          >
-            Let's Talk
-          </a>
+          </div>
+
+          {/* Center: Desktop Nav Links */}
+          <div className="hidden md:flex flex-[2] justify-center items-center">
+            <GooeyNav
+              items={navLinks.map(link => ({ label: link.name, href: link.href }))}
+            />
+          </div>
         </div>
+      </motion.nav>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-zinc-400 hover:text-zinc-100"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Nav */}
-      {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute top-full left-0 right-0 bg-zinc-950 border-b border-zinc-800/50 p-6 flex flex-col gap-4 md:hidden"
-        >
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-lg font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
-            >
-              {link.name}
-            </a>
-          ))}
-        </motion.div>
-      )}
-    </motion.nav>
+      {/* Mobile Nav Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-[90px] left-1/2 -translate-x-1/2 w-[90%] max-w-[800px] z-40 bg-zinc-950/95 backdrop-blur-md border border-zinc-800/50 rounded-xl p-6 flex flex-col gap-4 md:hidden"
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
+              >
+                {link.name}
+              </a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
