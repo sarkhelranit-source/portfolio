@@ -8,14 +8,32 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    // Show navbar instantly on mobile since Spline intro is disabled
+    if (window.innerWidth < 1024) {
+      setIsVisible(true);
+    }
+
     const handleScroll = () => {
-      // Reveal navbar after scrolling down some distance
-      setIsVisible(window.scrollY > 100);
+      // Reveal navbar after scrolling down some distance on desktop, always visible on mobile
+      if (window.innerWidth >= 1024) {
+        setIsVisible(window.scrollY > 100);
+      }
       // Change background style after some scroll
-      setIsScrolled(window.scrollY > 150);
+      setIsScrolled(window.scrollY > 50);
     };
+    
+    // Listen for resize to update visibility if screen changes
+    const handleResize = () => {
+        if (window.innerWidth < 1024) setIsVisible(true);
+        else setIsVisible(window.scrollY > 100);
+    }
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+        window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', handleResize);
+    }
   }, []);
 
   const navLinks = [
