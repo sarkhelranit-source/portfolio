@@ -5,11 +5,11 @@ export function Footer() {
     <footer className="border-t border-zinc-800/50 py-12 bg-zinc-950">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
 
-        <div className="flex items-center gap-2">
-          <span className="text-xl font-display font-bold tracking-tighter text-zinc-100">
-            RANIT<span className="text-emerald-500">.</span>
-          </span>
-          <span className="text-zinc-600 text-sm ml-4">
+        <div className="flex flex-col sm:flex-row items-center gap-2">
+          <a href="#home" className="flex items-center">
+            <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-10 w-auto object-contain mix-blend-screen" />
+          </a>
+          <span className="text-zinc-600 text-sm ml-0 sm:ml-4 sm:border-l sm:border-zinc-800/80 sm:pl-4">
             © {new Date().getFullYear()} Ranit Sarkhel
           </span>
         </div>
