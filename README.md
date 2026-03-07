@@ -1,4 +1,4 @@
-# Ranit Sarkhel | Cloud Engineer & AI Automation Specialist
+# Ranit Sarkhel | Cloud Engineer & AI Automation Engineer
 
 A sleek, interactive portfolio designed to showcase my expertise in AWS, Docker, AI Automation, and full-stack development.
 
