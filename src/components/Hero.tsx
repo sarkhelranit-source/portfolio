@@ -2,25 +2,81 @@ import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import TextType from '../../components/TextType';
 import SplitText from '../../components/SplitText';
+import FluidGlass from '../../components/FluidGlass';
+import { useState, useEffect } from 'react';
+import { Image as ThreeImage } from '@react-three/drei';
+
+function HeroBackground3D() {
+  return (
+    <group>
+      <ThreeImage
+        url="/headshot.jpg"
+        scale={[11, 11]}
+        position={[0, 0, 0]}
+        transparent
+        opacity={0.35}
+        grayscale={1}
+      />
+    </group>
+  );
+}
 
 export function Hero() {
+  const [showGlass, setShowGlass] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sy = window.scrollY;
+      const vh = window.innerHeight;
+      // Show glass when scrolled into view, hide when scrolled past completely
+      setShowGlass(sy > vh * 0.1 && sy < vh * 1.6);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-zinc-950 z-10 pb-20">
       {/* Background Grid - subtle indication of 3D space */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] z-[-1]"></div>
 
-      {/* Refined Headshot Aura - Round with feathered edges */}
-      <div className="absolute inset-0 w-full h-full opacity-35 pointer-events-none z-0 flex items-center justify-center overflow-hidden">
-        {/* Stronger radial shadow to help it fade completely at the edges */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,transparent_50%,#09090b_72%)] z-10"></div>
-        <img
-          src="/headshot.jpg"
-          alt="Ranit Sarkhel Aura"
-          className="h-[90vh] w-[90vh] max-w-none object-contain grayscale brightness-90 contrast-110 [mask-image:radial-gradient(circle_at_center,black_55%,transparent_70%)]"
-        />
+      {/* Refined Headshot Aura - Only show DOM version if glass is NOT active to avoid duplicates */}
+      {!showGlass && (
+        <div className="absolute inset-0 w-full h-full opacity-35 pointer-events-none z-10 flex items-center justify-center overflow-hidden">
+          {/* Stronger radial shadow to help it fade completely at the edges */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,transparent_50%,#09090b_72%)] z-10"></div>
+          <img
+            src="/headshot.jpg"
+            alt="Ranit Sarkhel Aura"
+            className="h-[50vh] w-[50vh] md:h-[70vh] md:w-[70vh] max-w-full md:max-w-none object-contain grayscale brightness-90 contrast-110 [mask-image:radial-gradient(circle_at_center,black_55%,transparent_70%)]"
+          />
+        </div>
+      )}
+
+
+      <div className="absolute inset-0 z-20 pointer-events-auto overflow-hidden">
+        {showGlass && (
+          <FluidGlass
+            mode="lens"
+            lensProps={{
+              scale: 0.25,
+              ior: 1.15,
+              thickness: 2,
+              transmission: 1,
+              roughness: 0,
+              chromaticAberration: 0.05,
+              anisotropy: 0.01
+            }}
+          >
+            <HeroBackground3D />
+          </FluidGlass>
+        )}
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col items-center text-center">
+      {/* Main content - Higher z-index than background but lower than or same as FluidGlass if needed. 
+          Set pointer-events-none on the wrapper to allow mouse to reach FluidGlass layer below if we needed to,
+          but here FluidGlass is z-20 and content is z-30. */}
+      <div className="relative z-30 max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col items-center text-center pointer-events-none">
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -41,21 +97,11 @@ export function Hero() {
           className="text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-zinc-100 to-zinc-500 mb-6"
         />
 
-        <div className="max-w-2xl text-lg md:text-xl text-zinc-400 mb-10 font-light leading-relaxed">
-          <SplitText
-            text="AWS Cloud Support Executive with a strong foundation in Linux administration, containerization, and infrastructure security. Experienced in managing cloud environments, monitoring system health, and automating operational workflows."
-            delay={7.5}
-            duration={0.25}
-            tag="span"
-            textAlign="center"
-          />
-        </div>
-
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-center gap-4"
+          className="flex flex-col sm:flex-row items-center gap-4 pointer-events-auto"
         >
           <a
             href="#projects"

@@ -15,8 +15,8 @@ export function SplineHero() {
         };
 
         const handleScroll = () => {
-            // Unmount the heavy 3D canvas if user scrolls deep into the page
-            setIsInView(window.scrollY < window.innerHeight * 1.1);
+            // Unmount the heavy 3D canvas earlier to free up GPU resources for the next sections
+            setIsInView(window.scrollY < window.innerHeight * 0.1);
         };
 
         // Initial check
