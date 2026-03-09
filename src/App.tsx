@@ -17,6 +17,7 @@ import { useState, useEffect } from 'react';
 
 export default function App() {
   const [showEther, setShowEther] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,9 +25,21 @@ export default function App() {
       // This prevents conflicting WebGL contexts from lagging the browser
       setShowEther(window.scrollY > window.innerHeight * 0.5);
     };
+    
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', checkScreenSize, { passive: true });
+    
     handleScroll(); // Initial check
-    return () => window.removeEventListener('scroll', handleScroll);
+    checkScreenSize(); // Initial check
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', checkScreenSize);
+    };
   }, []);
 
   return (
@@ -38,7 +51,7 @@ export default function App() {
         style={{ display: showEther ? 'block' : 'none' }}
       >
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-          {showEther && (
+          {showEther && isDesktop && (
             <LiquidEther
               colors={[ '#5227FF', '#FF9FFC', '#B19EEF' ]}
               mouseForce={20}

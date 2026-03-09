@@ -23,6 +23,7 @@ function HeroBackground3D() {
 
 export function Hero() {
   const [showGlass, setShowGlass] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,17 +32,29 @@ export function Hero() {
       // Show glass when scrolled into view, hide when scrolled past completely
       setShowGlass(sy > vh * 0.1 && sy < vh * 1.6);
     };
+    
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
     handleScroll();
+    handleResize();
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-zinc-950 z-10 pb-20">
       {/* Background Grid - subtle indication of 3D space */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] z-[-1]"></div>
 
-      {/* Refined Headshot Aura - Only show DOM version if glass is NOT active to avoid duplicates */}
-      {!showGlass && (
+      {/* Refined Headshot Aura - Only show DOM version if glass is NOT active or if on mobile to avoid duplicates */}
+      {(!showGlass || !isDesktop) && (
         <div className="absolute inset-0 w-full h-full opacity-35 pointer-events-none z-10 flex items-center justify-center overflow-hidden">
           {/* Stronger radial shadow to help it fade completely at the edges */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,transparent_50%,#09090b_72%)] z-10"></div>
@@ -55,7 +68,7 @@ export function Hero() {
 
 
       <div className="absolute inset-0 z-20 pointer-events-auto overflow-hidden">
-        {showGlass && (
+        {showGlass && isDesktop && (
           <FluidGlass
             mode="lens"
             lensProps={{
