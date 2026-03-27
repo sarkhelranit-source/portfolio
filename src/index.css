@@ -12,6 +12,13 @@
 
 body {
   @apply bg-zinc-950 text-zinc-50 antialiased selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden;
+  cursor: url('/cursor-mac.svg') 8 8, auto;
+}
+
+a,
+button,
+[role="button"] {
+  cursor: url('/cursor-hand.svg') 12 2, pointer;
 }
 
 /* Custom scrollbar for a sleeker look */
@@ -158,6 +165,7 @@ a[href*="spline.design"],
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
