@@ -32,7 +32,7 @@ export function About() {
   }, { scope: sectionRef });
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 md:py-32 relative">
+    <section id="about" ref={sectionRef} className="py-24 md:py-32 relative z-20 bg-zinc-950">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Centered Heading with SVG draw animation */}

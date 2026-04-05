@@ -5,6 +5,7 @@
 
 import { Navbar } from './components/Navbar';
 import { SplineHero } from './components/SplineHero';
+import { BentoGallery } from './components/BentoGallery';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Experience } from './components/Experience';
@@ -64,16 +65,16 @@ export default function App() {
   return (
     <>
       {/* Fixed elements — OUTSIDE the smooth wrapper so they don't get smoothed */}
-      
+
       {/* Background LiquidEther */}
-      <div 
+      <div
         className="fixed inset-0 z-[-1] bg-zinc-950 pointer-events-none"
         style={{ display: showEther ? 'block' : 'none' }}
       >
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
           {showEther && isDesktop && (
             <LiquidEther
-              colors={[ '#5227FF', '#FF9FFC', '#B19EEF' ]}
+              colors={['#5227FF', '#FF9FFC', '#B19EEF']}
               mouseForce={20}
               cursorSize={55}
               isViscous
@@ -100,12 +101,15 @@ export default function App() {
         <div id="smooth-content">
           <main className="relative z-10 min-h-screen text-zinc-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
             <SplineHero />
+            <BentoGallery />
             <Hero />
             <About />
             <Experience />
-            <Credentials />
-            <Projects />
-            <Contact />
+            <div className="relative z-20 bg-zinc-950">
+              <Credentials />
+              <Projects />
+              <Contact />
+            </div>
           </main>
           <div className="relative z-10">
             <Footer />
