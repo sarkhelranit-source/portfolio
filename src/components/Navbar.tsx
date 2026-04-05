@@ -15,22 +15,27 @@ export function Navbar() {
     }
 
     const handleScroll = () => {
-      // Reveal navbar after scrolling down some distance on desktop, always visible on mobile
+      const heroEl = document.getElementById('home');
       if (window.innerWidth >= 1024) {
-        setIsVisible(window.scrollY > 100);
+        if (heroEl) {
+          const rect = heroEl.getBoundingClientRect();
+          // Show navbar once the Hero section is near or in the viewport
+          setIsVisible(rect.top < window.innerHeight * 0.8);
+        } else {
+          setIsVisible(window.scrollY > 100);
+        }
       }
-      // Change background style after some scroll
       setIsScrolled(window.scrollY > 50);
     };
 
-    // Listen for resize to update visibility if screen changes
     const handleResize = () => {
       if (window.innerWidth < 1024) setIsVisible(true);
-      else setIsVisible(window.scrollY > 100);
+      else handleScroll();
     }
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
+    handleScroll();
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);

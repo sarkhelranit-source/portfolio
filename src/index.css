@@ -16,19 +16,12 @@ html, body {
 
 body {
   @apply bg-zinc-950 text-zinc-50 antialiased selection:bg-emerald-500/30 selection:text-emerald-200;
-  cursor: url('/cursor-mac.svg') 8 8, auto;
   font-family: 'Unbounded', sans-serif;
 }
 
 /* ScrollSmoother pin-spacer fix */
 .pin-spacer {
   pointer-events: none;
-}
-
-a,
-button,
-[role="button"] {
-  cursor: url('/cursor-hand.svg') 12 2, pointer;
 }
 
 /* Custom scrollbar for a sleeker look */

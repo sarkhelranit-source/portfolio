@@ -27,11 +27,12 @@ export default function App() {
   const smootherRef = useRef<ScrollSmoother | null>(null);
 
   useEffect(() => {
-    // Create ScrollSmoother — smooth: 2 gives buttery inertia, effects: true enables data-speed parallax
+    // Create ScrollSmoother — smooth: 0.8 provides direct control with a hint of polish, effects: true enables data-speed parallax
     smootherRef.current = ScrollSmoother.create({
-      smooth: 2,
+      smooth: 0.8,
       effects: true,
       smoothTouch: 0.1,
+      normalizeScroll: true,
     });
 
     const handleScroll = () => {
