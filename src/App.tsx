@@ -13,39 +13,59 @@ import { Projects } from './components/Projects';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import LiquidEther from '../components/LiquidEther';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
+
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export default function App() {
   const [showEther, setShowEther] = useState(false);
   const [isDesktop, setIsDesktop] = useState(true);
+  const smootherRef = useRef<ScrollSmoother | null>(null);
 
   useEffect(() => {
+    // Create ScrollSmoother — smooth: 2 gives buttery inertia, effects: true enables data-speed parallax
+    smootherRef.current = ScrollSmoother.create({
+      smooth: 2,
+      effects: true,
+      smoothTouch: 0.1,
+    });
+
     const handleScroll = () => {
-      // Only render/enable the WebGL background if scrolled past the SplineHero 
-      // This prevents conflicting WebGL contexts from lagging the browser
-      setShowEther(window.scrollY > window.innerHeight * 0.5);
+      // Use ScrollSmoother's scroll position for accurate tracking
+      const sy = smootherRef.current ? smootherRef.current.scrollTop() : window.scrollY;
+      const vh = window.innerHeight;
+      setShowEther(sy > vh * 0.5);
     };
-    
+
     const checkScreenSize = () => {
       setIsDesktop(window.innerWidth >= 1024);
     };
 
+    // ScrollSmoother fires native scroll events, so this still works
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', checkScreenSize, { passive: true });
-    
-    handleScroll(); // Initial check
-    checkScreenSize(); // Initial check
-    
+
+    handleScroll();
+    checkScreenSize();
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', checkScreenSize);
+      if (smootherRef.current) {
+        smootherRef.current.kill();
+        smootherRef.current = null;
+      }
     };
   }, []);
 
   return (
-    <div className="min-h-screen text-zinc-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
+    <>
+      {/* Fixed elements — OUTSIDE the smooth wrapper so they don't get smoothed */}
       
-      {/* Background Component that takes effect behind transparent sections (like About onwards) */}
+      {/* Background LiquidEther */}
       <div 
         className="fixed inset-0 z-[-1] bg-zinc-950 pointer-events-none"
         style={{ display: showEther ? 'block' : 'none' }}
@@ -74,18 +94,25 @@ export default function App() {
       </div>
 
       <Navbar />
-      <main className="relative z-10">
-        <SplineHero />
-        <Hero />
-        <About />
-        <Experience />
-        <Credentials />
-        <Projects />
-        <Contact />
-      </main>
-      <div className="relative z-10">
-        <Footer />
+
+      {/* ScrollSmoother wrapper — all scrollable content inside */}
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <main className="relative z-10 min-h-screen text-zinc-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
+            <SplineHero />
+            <Hero />
+            <About />
+            <Experience />
+            <Credentials />
+            <Projects />
+            <Contact />
+          </main>
+          <div className="relative z-10">
+            <Footer />
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
+
