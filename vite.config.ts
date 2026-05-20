@@ -4,6 +4,8 @@ import path from 'path';
 import fs from 'fs';
 import { defineConfig, loadEnv } from 'vite';
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 // Automatically copy AI generated images to the public directory
 const srcDir = '/home/ubuntu/.gemini/antigravity/brain/4d6da65d-3ade-48f6-9fb6-1222bbfc415c';
 const destDir = path.resolve(__dirname, 'public');
@@ -38,7 +40,7 @@ try {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), cloudflare()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
