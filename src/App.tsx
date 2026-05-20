@@ -5,8 +5,9 @@
 
 import { Navbar } from './components/Navbar';
 import { SplineHero } from './components/SplineHero';
-import { BentoGallery } from './components/BentoGallery';
 import { Hero } from './components/Hero';
+
+
 import { About } from './components/About';
 import { Experience } from './components/Experience';
 import { Credentials } from './components/Credentials';
@@ -102,8 +103,8 @@ export default function App() {
         <div id="smooth-content">
           <main className="relative z-10 min-h-screen text-zinc-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
             <SplineHero />
-            <BentoGallery />
             <Hero />
+
             <About />
             <Experience />
             <div className="relative z-20 bg-zinc-950">
