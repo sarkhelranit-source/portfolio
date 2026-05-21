@@ -50,6 +50,15 @@ export function Navbar() {
     { name: 'Contact', href: '#contact' },
   ];
 
+  const scrollToSection = (hash: string) => {
+    const target = document.querySelector(hash) as HTMLElement | null;
+    if (!target) return;
+    window.scrollTo({
+      top: window.scrollY + target.getBoundingClientRect().top,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <>
       <motion.nav
@@ -74,6 +83,7 @@ export function Navbar() {
           <div className="hidden md:flex flex-[2] justify-center items-center">
             <GooeyNav
               items={navLinks.map(link => ({ label: link.name, href: link.href }))}
+              onItemClick={scrollToSection}
             />
           </div>
 
@@ -102,7 +112,11 @@ export function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMobileMenuOpen(false);
+                  scrollToSection(link.href);
+                }}
                 className="text-lg font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
               >
                 {link.name}
