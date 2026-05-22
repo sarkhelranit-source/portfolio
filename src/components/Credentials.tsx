@@ -87,7 +87,7 @@ export function Credentials() {
                 <div className="cred-header flex flex-col items-center justify-center mb-16 space-y-6">
                     <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mt-2">
                         <h2 
-                            className={`cred-heading text-4xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${!isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
+                            className={`cred-heading text-3xl sm:text-4xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${!isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
                             onClick={() => setIsAppMode(false)}
                             style={{ cursor: 'pointer' }}
                         >
@@ -96,18 +96,18 @@ export function Credentials() {
                         
                         <button 
                             onClick={() => setIsAppMode(!isAppMode)}
-                            className="cred-toggle w-[72px] h-10 rounded-full p-1 relative flex items-center transition-colors duration-500 focus:outline-none"
+                            className="cred-toggle w-[64px] md:w-[72px] h-9 md:h-10 rounded-full p-1 relative flex items-center transition-colors duration-500 focus:outline-none"
                             style={{ backgroundColor: isAppMode ? '#F7FF9E' : '#3f3f46' }}
                         >
                             <motion.div 
-                                className="w-8 h-8 bg-zinc-950 rounded-full shadow-sm"
-                                animate={{ x: isAppMode ? 32 : 0 }}
+                                className="w-7 h-7 md:w-8 md:h-8 bg-zinc-950 rounded-full shadow-sm"
+                                animate={{ x: isAppMode ? (window.innerWidth < 768 ? 28 : 32) : 0 }}
                                 transition={{ type: "spring", stiffness: 500, damping: 30 }}
                             />
                         </button>
                         
                         <h2 
-                            className={`cred-heading text-4xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
+                            className={`cred-heading text-3xl sm:text-4xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
                             onClick={() => setIsAppMode(true)}
                             style={{ cursor: 'pointer' }}
                         >

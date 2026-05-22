@@ -93,8 +93,8 @@ export function About() {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Centered Heading with SVG draw animation */}
-        <div className="about-heading relative z-[2] mb-12">
-          <h2 className="relative text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-center uppercase" style={{ perspective: '600px' }}>
+        <div className="about-heading relative z-[2] mb-8 md:mb-12">
+          <h2 className="relative text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-center uppercase" style={{ perspective: '600px' }}>
             <span className="relative inline-block">
               AWS Engineer
               <svg
@@ -139,7 +139,7 @@ export function About() {
         </div>
 
         {/* Horizontal Skill Cards */}
-        <div className="skill-cards-grid grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="skill-cards-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {skills.map((skill) => (
             <div
               key={skill.name}

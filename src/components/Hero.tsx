@@ -65,22 +65,22 @@ export function Hero() {
           typingSpeed={100}
           initialDelay={100}
           cursorClassName="text-zinc-500"
-          className="text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-zinc-100 to-zinc-500 mb-6"
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-zinc-100 to-zinc-500 mb-4 md:mb-6 px-4"
         />
 
         <div
-          className="hero-cta-group flex flex-col sm:flex-row items-center gap-4 pointer-events-auto"
+          className="hero-cta-group flex flex-col sm:flex-row items-center gap-3 sm:gap-4 pointer-events-auto w-full sm:w-auto px-4"
         >
           <button
             onClick={() => scrollTo('#projects')}
-            className="hero-btn group flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-100 text-zinc-950 font-medium hover:bg-zinc-300 transition-all cursor-pointer"
+            className="hero-btn w-full sm:w-auto justify-center group flex items-center gap-2 px-6 py-3.5 sm:py-3 rounded-full bg-zinc-100 text-zinc-950 font-medium hover:bg-zinc-300 transition-all cursor-pointer"
           >
             View Work
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </button>
           <button
             onClick={() => scrollTo('#contact')}
-            className="hero-btn px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium hover:bg-zinc-800 transition-all cursor-pointer"
+            className="hero-btn w-full sm:w-auto justify-center px-6 py-3.5 sm:py-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium hover:bg-zinc-800 transition-all cursor-pointer"
           >
             Contact Me
           </button>

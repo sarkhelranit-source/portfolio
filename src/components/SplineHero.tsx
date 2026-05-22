@@ -68,10 +68,17 @@ export function SplineHero() {
                 )}
             </div>
 
-            {/* Fallback pattern while loading or on very low-end devices */}
+            {/* Fallback pattern while loading or on very low-end devices, AND a specific mobile fallback */}
             {!isLoaded && (
                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
             )}
+            
+            {/* Mobile-specific hero visual (since Spline is disabled) */}
+            <div className="md:hidden absolute inset-0 z-0 flex items-center justify-center opacity-40">
+                 <div className="w-[300px] h-[300px] bg-emerald-500/20 rounded-full blur-[80px]"></div>
+                 <div className="absolute w-[200px] h-[200px] bg-zinc-400/20 rounded-full blur-[60px] translate-x-10 translate-y-10"></div>
+                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:30px_30px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+            </div>
 
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
                 <motion.div

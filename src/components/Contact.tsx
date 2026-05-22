@@ -159,7 +159,7 @@ export function Contact() {
             <div className="contact-info space-y-6">
               <div className="contact-info-item">
                 <p className="text-sm text-zinc-500 uppercase tracking-wider font-medium mb-2">Email</p>
-                <a href="mailto:sarkhelranit2001@gmail.com" className="text-xl text-zinc-100 hover:text-emerald-400 transition-colors">
+                <a href="mailto:sarkhelranit2001@gmail.com" className="text-lg md:text-xl text-zinc-100 hover:text-emerald-400 transition-colors break-all md:break-normal">
                   sarkhelranit2001@gmail.com
                 </a>
               </div>

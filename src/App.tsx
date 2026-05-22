@@ -28,13 +28,21 @@ export default function App() {
   const smootherRef = useRef<ScrollSmoother | null>(null);
 
   useEffect(() => {
-    // Create ScrollSmoother — smooth: 0.8 provides direct control with a hint of polish, effects: true enables data-speed parallax
-    smootherRef.current = ScrollSmoother.create({
-      smooth: 0.8,
-      effects: true,
-      smoothTouch: 0.1,
-      normalizeScroll: true,
-    });
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    checkScreenSize();
+
+    // Only create ScrollSmoother on desktop — it causes scroll hijacking and jank on touch devices
+    if (window.innerWidth >= 1024) {
+      smootherRef.current = ScrollSmoother.create({
+        smooth: 0.8,
+        effects: true,
+        smoothTouch: false,
+        normalizeScroll: true,
+      });
+    }
 
     const handleScroll = () => {
       // Use ScrollSmoother's scroll position for accurate tracking
@@ -43,16 +51,11 @@ export default function App() {
       setShowEther(sy > vh * 0.5);
     };
 
-    const checkScreenSize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-
     // ScrollSmoother fires native scroll events, so this still works
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', checkScreenSize, { passive: true });
 
     handleScroll();
-    checkScreenSize();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);

@@ -154,7 +154,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
               )}
             </div>
 
-            <div className="timeline-entry-content relative pl-20 pr-4 md:pl-4 w-full">
+            <div className="timeline-entry-content relative pl-16 md:pl-4 w-full">
               {item.logo ? (
                 <div className="md:hidden flex mb-6 w-full items-center justify-start">
                   <img src={item.logo} alt={item.title} className="w-auto h-auto max-w-[100px] max-h-[50px] object-contain opacity-80" />

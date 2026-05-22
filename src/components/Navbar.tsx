@@ -75,7 +75,7 @@ export function Navbar() {
           {/* Left: Logo */}
           <div className="flex-1 flex justify-start">
             <a href="#home" className="flex items-center">
-              <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-12 w-auto object-contain mix-blend-screen" />
+              <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-10 md:h-12 w-auto object-contain mix-blend-screen" />
             </a>
           </div>
 
@@ -91,7 +91,7 @@ export function Navbar() {
           <div className="flex flex-1 justify-end md:hidden">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-zinc-400 hover:text-zinc-100 transition-colors focus:outline-none"
+              className="p-1 md:p-2 text-zinc-400 hover:text-zinc-100 transition-colors focus:outline-none"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>

@@ -43,7 +43,7 @@ export function Footer() {
     <footer ref={footerRef} className="border-t border-zinc-800/50 py-12 bg-zinc-950">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
 
-        <div className="footer-brand flex flex-col sm:flex-row items-center gap-2">
+        <div className="footer-brand flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-2 text-center sm:text-left">
           <a href="#home" className="flex items-center">
             <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-10 w-auto object-contain mix-blend-screen" />
           </a>
