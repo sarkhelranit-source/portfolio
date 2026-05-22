@@ -78,10 +78,10 @@ export function Navbar() {
             : 'top-8 bg-zinc-950/40 backdrop-blur-sm border-white/10 py-3'
           }`}
       >
-        <div className="flex items-center justify-between w-full px-4 md:px-6 h-[44px]">
+        <div className="flex items-center justify-between w-full px-4 md:px-6 h-12">
 
           {/* Left: Logo */}
-          <div className="flex-1 flex justify-start">
+          <div className="flex-1 flex justify-start items-center">
             <a href="#home" className="flex items-center">
               <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-10 md:h-12 w-auto object-contain mix-blend-screen" />
             </a>

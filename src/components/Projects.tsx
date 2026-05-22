@@ -196,7 +196,7 @@ export function Projects() {
                 </div>
 
                 {/* Project Image Card */}
-                <div className={`relative w-full md:w-[calc(50%-3rem)] flex flex-col mt-4 md:mt-0 ${isLeft ? 'md:items-end' : 'md:items-start'}`}>
+                <div className={`relative w-full md:w-[calc(50%-3rem)] flex flex-col mt-4 md:mt-0 pl-14 md:pl-0 ${isLeft ? 'md:items-end' : 'md:items-start'}`}>
                   <a
                     href={project.link}
                     target="_blank"
@@ -230,7 +230,7 @@ export function Projects() {
                 </div>
 
                 {/* Project Description Text */}
-                <div className={`relative w-full md:w-[calc(50%-3rem)] flex flex-col justify-center mt-6 md:mt-12 ${isLeft ? 'md:items-start md:text-left' : 'md:items-end md:text-right'}`}>
+                <div className={`relative w-full md:w-[calc(50%-3rem)] flex flex-col justify-center mt-6 md:mt-12 pl-14 md:pl-0 ${isLeft ? 'md:items-start md:text-left' : 'md:items-end md:text-right'}`}>
                   <div 
                     className="project-desc max-w-md flex flex-col"
                   >
