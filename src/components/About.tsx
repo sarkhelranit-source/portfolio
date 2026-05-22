@@ -1,159 +1,115 @@
-import { useRef } from 'react';
-import { Code2, Palette, Zap, Globe } from 'lucide-react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
-
-import { useGSAP } from '@gsap/react';
-
-gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
-
-const skills = [
-  { name: 'AWS Cloud Services', icon: <Globe size={20} />, desc: 'EC2, IAM, S3, architecture and implementation' },
-  { name: 'Infrastructure & Security', icon: <Zap size={20} />, desc: 'AWS Security, Least Privileged Access, Wazuh' },
-  { name: 'Containerization', icon: <Code2 size={20} />, desc: 'Docker, Docker Compose, Microservices and Networking' },
-  { name: 'AI & Automation', icon: <Palette size={20} />, desc: 'Agentic Automation, n8n workflow creation' },
-];
+import React, { useCallback } from 'react';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
+import { FadeIn } from './FadeIn';
+import { AnimatedText } from './AnimatedText';
+import { ContactButton } from './ContactButton';
 
 export function About() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useGSAP(() => {
-    // Existing SVG draw animation
-    gsap.from('.about-draw', {
-      drawSVG: "0%",
-      ease: "none",
-      scrollTrigger: {
-        trigger: '.about-heading',
-        start: "top 80%",
-        end: "top 20%",
-        scrub: true,
-      }
-    });
-
-    // Heading — fade up (without SplitText to preserve the SVG circle structure)
-    gsap.from('.about-heading h2', {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.about-heading',
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-    });
-
-    // Description paragraph
-    gsap.from('.about-description', {
-      y: 30,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: '.about-description',
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-    });
-
-    // Tech tags — staggered entrance
-    gsap.from('.about-tag', {
-      y: 20,
-      opacity: 0,
-      scale: 0.8,
-      stagger: 0.05,
-      duration: 0.6,
-      ease: 'back.out(1.7)',
-      scrollTrigger: {
-        trigger: '.about-tags',
-        start: 'top 88%',
-        toggleActions: 'play none none none',
-      },
-    });
-
-    // Skill cards — staggered fly up
-    gsap.from('.skill-card', {
-      y: 60,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 0.7,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.skill-cards-grid',
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-    });
-
-  }, { scope: sectionRef });
+  const scrollTo = useCallback((selector: string) => {
+    const smoother = ScrollSmoother.get();
+    if (smoother) {
+      smoother.scrollTo(selector, true, 'top top');
+    } else {
+      document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 md:py-32 relative z-20 bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+    <section
+      id="about"
+      className="relative min-h-screen bg-[#0C0C0C] text-[#D7E2EA] px-5 sm:px-8 md:px-10 py-20 flex flex-col items-center justify-center overflow-hidden z-20"
+      style={{ contentVisibility: 'auto' }}
+    >
+      {/* 4 decorative 3D images positioned absolutely in corners */}
 
-        {/* Centered Heading with SVG draw animation */}
-        <div className="about-heading relative z-[2] mb-8 md:mb-12">
-          <h2 className="relative text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-center uppercase" style={{ perspective: '600px' }}>
-            <span className="relative inline-block">
-              AWS Engineer
-              <svg
-                className="absolute pointer-events-none"
-                style={{ width: '112%', top: '50%', transform: 'translateY(-50%) rotate(2deg)', left: '-6%' }}
-                data-name="Layer 1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 842.14 500"
-              >
-                <path
-                  className="about-draw"
-                  d="M336.2,130.05C261.69,118,16.52,122,20.65,244.29c4.17,123,484.3,299.8,734.57,108.37,244-186.65-337.91-311-546.54-268.47"
-                  fill="none"
-                  stroke="#8486aa"
-                  strokeMiterlimit={10}
-                  strokeWidth={8}
-                />
-              </svg>
-            </span>
-            <br />
-            <span className="text-zinc-500">at Moresco Software Solutions.</span>
+      {/* Top-left Moon */}
+      <FadeIn
+        delay={0.1}
+        x={-80}
+        y={0}
+        duration={0.9}
+        className="absolute top-[4%] left-[1%] sm:left-[2%] md:left-[4%] z-10 pointer-events-none select-none"
+      >
+        <img
+          src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png"
+          alt="Moon 3D decoration"
+          className="w-[60px] sm:w-[120px] md:w-[160px] lg:w-[210px] h-auto pointer-events-none select-none"
+          referrerPolicy="no-referrer"
+        />
+      </FadeIn>
+
+      {/* Bottom-left 3D Object */}
+      <FadeIn
+        delay={0.25}
+        x={-80}
+        y={0}
+        duration={0.9}
+        className="absolute bottom-[8%] left-[3%] sm:left-[6%] md:left-[10%] z-10 pointer-events-none select-none"
+      >
+        <img
+          src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png"
+          alt="Geometric 3D decoration"
+          className="w-[50px] sm:w-[100px] md:w-[140px] lg:w-[180px] h-auto pointer-events-none select-none"
+          referrerPolicy="no-referrer"
+        />
+      </FadeIn>
+
+      {/* Top-right Lego */}
+      <FadeIn
+        delay={0.15}
+        x={80}
+        y={0}
+        duration={0.9}
+        className="absolute top-[4%] right-[1%] sm:right-[2%] md:right-[4%] z-10 pointer-events-none select-none"
+      >
+        <img
+          src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png"
+          alt="Lego 3D decoration"
+          className="w-[60px] sm:w-[120px] md:w-[160px] lg:w-[210px] h-auto pointer-events-none select-none"
+          referrerPolicy="no-referrer"
+        />
+      </FadeIn>
+
+      {/* Bottom-right 3D group */}
+      <FadeIn
+        delay={0.3}
+        x={80}
+        y={0}
+        duration={0.9}
+        className="absolute bottom-[8%] right-[3%] sm:right-[6%] md:right-[10%] z-10 pointer-events-none select-none"
+      >
+        <img
+          src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png"
+          alt="Cubes 3D decoration"
+          className="w-[65px] sm:w-[130px] md:w-[170px] lg:w-[220px] h-auto pointer-events-none select-none"
+          referrerPolicy="no-referrer"
+        />
+      </FadeIn>
+
+      {/* Centered contents */}
+      <div className="relative z-20 flex flex-col items-center text-center gap-10 sm:gap-14 md:gap-16 w-full max-w-4xl px-4">
+        {/* Heading */}
+        <FadeIn delay={0} y={40}>
+          <h2
+            className="hero-heading font-black uppercase tracking-tight leading-none text-center"
+            style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
+          >
+            About me
           </h2>
+        </FadeIn>
+
+        {/* Text Block & Button */}
+        <div className="flex flex-col items-center gap-16 sm:gap-20 md:gap-24 w-full">
+          <AnimatedText
+            text="With more than five years of experience in IT and systems engineering, i focus on cloud architecture, system security, and workflow automation. I truly enjoy working with organizations that aim to scale reliably and secure their cloud assets. Let's build something incredible together!"
+            className="text-[#D7E2EA] font-medium leading-relaxed max-w-[560px] text-center"
+            style={{ fontSize: 'clamp(1rem, 2vw, 1.35rem)' }}
+          />
+
+          <FadeIn delay={0.4} y={30}>
+            <ContactButton onClick={() => scrollTo('#contact')} />
+          </FadeIn>
         </div>
-
-        {/* Description + Tech Tags — centered */}
-        <div className="max-w-2xl mx-auto text-center mt-12 mb-16">
-          <p className="about-description text-zinc-400 text-lg leading-relaxed mb-8">
-            Passionate about driving efficiency and innovation in cloud computing, security, and automation.
-            Currently working as a Cloud Associate with deep expertise in AWS, Docker, and Linux.
-          </p>
-
-          <div className="about-tags flex flex-wrap gap-3 justify-center">
-            {['AWS Services', 'Docker', 'Linux', 'n8n', 'Kubernetes', 'Git', 'UI/UX'].map((tech) => (
-              <span
-                key={tech}
-                className="about-tag px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-sm text-zinc-300"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Horizontal Skill Cards */}
-        <div className="skill-cards-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {skills.map((skill) => (
-            <div
-              key={skill.name}
-              className="skill-card p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-800/50 transition-colors"
-            >
-              <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-100 mb-4">
-                {skill.icon}
-              </div>
-              <h3 className="text-lg font-medium text-zinc-100 mb-2">{skill.name}</h3>
-              <p className="text-sm text-zinc-400">{skill.desc}</p>
-            </div>
-          ))}
-        </div>
-
       </div>
     </section>
   );

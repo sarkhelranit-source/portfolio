@@ -40,12 +40,12 @@ export function Footer() {
   }, { scope: footerRef });
 
   return (
-    <footer ref={footerRef} className="border-t border-zinc-800/50 py-12 bg-zinc-950">
+    <footer ref={footerRef} className="border-t border-[#D7E2EA]/10 py-12 bg-[#0C0C0C]">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
 
         <div className="footer-brand flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-2 text-center sm:text-left">
-          <a href="#home" className="flex items-center">
-            <img src="/logo-v2.png" alt="Ranit Sarkhel" className="!h-12 md:!h-14 w-auto object-contain mix-blend-screen -mx-2" />
+          <a href="#home" className="flex items-center shrink-0">
+            <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-10 sm:h-12 md:h-14 w-auto object-contain" />
           </a>
           <span className="text-zinc-600 text-sm ml-0 sm:ml-4 sm:border-l sm:border-zinc-800/80 sm:pl-4">
             © {new Date().getFullYear()} Ranit Sarkhel

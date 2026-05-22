@@ -1,13 +1,10 @@
-import { ArrowRight } from 'lucide-react';
-import TextType from '../../components/TextType';
-import { useRef, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
+import { Magnet } from './Magnet';
+import { FadeIn } from './FadeIn';
+import { ContactButton } from './ContactButton';
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-
   const scrollTo = useCallback((selector: string) => {
     const smoother = ScrollSmoother.get();
     if (smoother) {
@@ -17,74 +14,96 @@ export function Hero() {
     }
   }, []);
 
-  useGSAP(() => {
-    // Set initial hidden state explicitly, then animate to visible.
-    // Using gsap.set + gsap.to avoids the immediateRender issues
-    // that cause elements to vanish when ScrollSmoother initializes.
-    gsap.set('.hero-badge', { y: 30, opacity: 0 });
-    gsap.set('.hero-btn', { y: 30, scale: 0.6, opacity: 0 });
-
-    const tl = gsap.timeline({ delay: 0.3 });
-
-    // Badge slides in
-    tl.to('.hero-badge', {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power3.out',
-    });
-
-    // CTA buttons spring in
-    tl.to('.hero-btn', {
-      y: 0,
-      scale: 1,
-      opacity: 1,
-      duration: 0.8,
-      stagger: 0.15,
-      ease: 'elastic.out(1, 0.5)',
-    }, '-=0.3');
-
-  }, { scope: sectionRef });
-
   return (
-    <section id="home" ref={sectionRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-zinc-950 z-10 pb-20">
+    <section
+      id="home"
+      className="relative h-screen w-full flex flex-col justify-between bg-[#0C0C0C] text-[#D7E2EA] overflow-hidden select-none z-20"
+      style={{ contentVisibility: 'auto' }}
+    >
+      {/* Navbar: Horizontal nav bar with logo and links */}
+      <FadeIn delay={0} y={-20} as="nav" className="relative z-30 w-full flex items-center justify-between px-6 md:px-10 pt-6 md:pt-8">
+        {/* Logo */}
+        <a href="#home" className="flex-shrink-0 cursor-pointer" onClick={(e) => { e.preventDefault(); scrollTo('#home'); }}>
+          <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-8 md:h-10 lg:h-12 w-auto object-contain" />
+        </a>
 
-      {/* Main content */}
-      <div className="relative z-30 max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col items-center text-center pointer-events-none">
-
-        <div
-          className="hero-badge inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/50 border border-zinc-800 text-xs font-medium text-zinc-400 mb-8 backdrop-blur-sm"
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          Available for new opportunities
-        </div>
-
-        <TextType
-          as="h1"
-          text="Ranit Sarkhel"
-          typingSpeed={100}
-          initialDelay={100}
-          cursorClassName="text-zinc-500"
-          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-zinc-100 to-zinc-500 mb-4 md:mb-6 px-4"
-        />
-
-        <div
-          className="hero-cta-group flex flex-col sm:flex-row items-center gap-3 sm:gap-4 pointer-events-auto w-full sm:w-auto px-4"
-        >
+        {/* Desktop Links */}
+        <div className="hidden sm:flex items-center gap-6 md:gap-8 lg:gap-12">
+          <button
+            onClick={() => scrollTo('#about')}
+            className="font-medium uppercase tracking-wider text-sm md:text-base lg:text-lg hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+          >
+            About
+          </button>
+          <button
+            onClick={() => scrollTo('#services')}
+            className="font-medium uppercase tracking-wider text-sm md:text-base lg:text-lg hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+          >
+            Price
+          </button>
           <button
             onClick={() => scrollTo('#projects')}
-            className="hero-btn w-full sm:w-auto justify-center group flex items-center gap-2 px-6 py-3.5 sm:py-3 rounded-full bg-zinc-100 text-zinc-950 font-medium hover:bg-zinc-300 transition-all cursor-pointer"
+            className="font-medium uppercase tracking-wider text-sm md:text-base lg:text-lg hover:opacity-70 transition-opacity duration-200 cursor-pointer"
           >
-            View Work
-            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            Projects
           </button>
           <button
             onClick={() => scrollTo('#contact')}
-            className="hero-btn w-full sm:w-auto justify-center px-6 py-3.5 sm:py-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium hover:bg-zinc-800 transition-all cursor-pointer"
+            className="font-medium uppercase tracking-wider text-sm md:text-base lg:text-lg hover:opacity-70 transition-opacity duration-200 cursor-pointer"
           >
-            Contact Me
+            Contact
           </button>
         </div>
+
+      </FadeIn>
+
+      {/* Hero Heading: Massive H1 */}
+      <div className="relative z-20 w-full overflow-hidden text-center mt-6 sm:mt-4 md:-mt-5 pointer-events-none">
+        <FadeIn delay={0.15} y={40}>
+          <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-[14vw] sm:text-[15vw] md:text-[16vw] lg:text-[17.5vw]">
+            hi, i&rsquo;m ranit
+          </h1>
+        </FadeIn>
+      </div>
+
+      {/* Hero Portrait: Centered absolutely */}
+      <FadeIn
+        delay={0.6}
+        y={30}
+        className="absolute left-1/2 -translate-x-1/2 z-10 w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] top-1/2 -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 pointer-events-auto"
+      >
+        <Magnet
+          padding={150}
+          strength={3}
+          activeTransition="transform 0.3s ease-out"
+          inactiveTransition="transform 0.6s ease-in-out"
+          className="w-full h-full"
+        >
+          <img
+            src="https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png"
+            alt="Ranit portrait"
+            className="w-full h-auto object-contain pointer-events-none select-none"
+            referrerPolicy="no-referrer"
+          />
+        </Magnet>
+      </FadeIn>
+
+      {/* Bottom Bar */}
+      <div className="relative z-30 w-full flex justify-between items-center pb-8 sm:pb-10 md:pb-12 px-6 md:px-10 mt-auto">
+        {/* Left tagline */}
+        <FadeIn delay={0.35} y={20}>
+          <p
+            className="font-light uppercase tracking-wide leading-snug text-[#D7E2EA] max-w-[160px] sm:max-w-[220px] md:max-w-[260px] select-none"
+            style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1.25rem)' }}
+          >
+            an aws engineer driven by crafting striking and unforgettable projects
+          </p>
+        </FadeIn>
+
+        {/* Right Contact button */}
+        <FadeIn delay={0.5} y={20}>
+          <ContactButton onClick={() => scrollTo('#contact')} />
+        </FadeIn>
       </div>
     </section>
   );
