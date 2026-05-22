@@ -1,9 +1,9 @@
-import { useRef, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { useRef } from 'react';
 import { Code2, Palette, Zap, Globe } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
+
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
@@ -19,6 +19,7 @@ export function About() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
+    // Existing SVG draw animation
     gsap.from('.about-draw', {
       drawSVG: "0%",
       ease: "none",
@@ -29,6 +30,62 @@ export function About() {
         scrub: true,
       }
     });
+
+    // Heading — fade up (without SplitText to preserve the SVG circle structure)
+    gsap.from('.about-heading h2', {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.about-heading',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Description paragraph
+    gsap.from('.about-description', {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.about-description',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Tech tags — staggered entrance
+    gsap.from('.about-tag', {
+      y: 20,
+      opacity: 0,
+      scale: 0.8,
+      stagger: 0.05,
+      duration: 0.6,
+      ease: 'back.out(1.7)',
+      scrollTrigger: {
+        trigger: '.about-tags',
+        start: 'top 88%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Skill cards — staggered fly up
+    gsap.from('.skill-card', {
+      y: 60,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.skill-cards-grid',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+
   }, { scope: sectionRef });
 
   return (
@@ -37,7 +94,7 @@ export function About() {
 
         {/* Centered Heading with SVG draw animation */}
         <div className="about-heading relative z-[2] mb-12">
-          <h2 className="relative text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-center uppercase">
+          <h2 className="relative text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-center uppercase" style={{ perspective: '600px' }}>
             <span className="relative inline-block">
               AWS Engineer
               <svg
@@ -64,16 +121,16 @@ export function About() {
 
         {/* Description + Tech Tags — centered */}
         <div className="max-w-2xl mx-auto text-center mt-12 mb-16">
-          <p className="text-zinc-400 text-lg leading-relaxed mb-8">
+          <p className="about-description text-zinc-400 text-lg leading-relaxed mb-8">
             Passionate about driving efficiency and innovation in cloud computing, security, and automation.
             Currently working as a Cloud Associate with deep expertise in AWS, Docker, and Linux.
           </p>
 
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="about-tags flex flex-wrap gap-3 justify-center">
             {['AWS Services', 'Docker', 'Linux', 'n8n', 'Kubernetes', 'Git', 'UI/UX'].map((tech) => (
               <span
                 key={tech}
-                className="px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-sm text-zinc-300"
+                className="about-tag px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-sm text-zinc-300"
               >
                 {tech}
               </span>
@@ -82,22 +139,18 @@ export function About() {
         </div>
 
         {/* Horizontal Skill Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {skills.map((skill, index) => (
-            <motion.div
+        <div className="skill-cards-grid grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {skills.map((skill) => (
+            <div
               key={skill.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-800/50 transition-colors"
+              className="skill-card p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-800/50 transition-colors"
             >
               <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-100 mb-4">
                 {skill.icon}
               </div>
               <h3 className="text-lg font-medium text-zinc-100 mb-2">{skill.name}</h3>
               <p className="text-sm text-zinc-400">{skill.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
 
@@ -105,4 +158,3 @@ export function About() {
     </section>
   );
 }
-

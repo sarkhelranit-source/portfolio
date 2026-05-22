@@ -1,10 +1,15 @@
-import { motion } from 'motion/react';
-import React, { useState } from 'react';
-import { Send, CheckCircle2 } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { useGSAP } from '@gsap/react';
 import './ContactButton.css';
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export function Contact() {
   const [formState, setFormState] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const sectionRef = useRef<HTMLElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,53 +48,135 @@ export function Contact() {
     }
   };
 
+  // GSAP animations
+  useGSAP(() => {
+    // Heading — SplitText by chars
+    const headingSplit = SplitText.create('.contact-heading', {
+      type: 'chars,words',
+    });
+
+    gsap.from(headingSplit.chars, {
+      y: 60,
+      opacity: 0,
+      rotationX: -60,
+      stagger: 0.02,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.contact-left',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Subtitle paragraph
+    gsap.from('.contact-subtitle', {
+      y: 20,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.contact-left',
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Email/Location info blocks
+    gsap.from('.contact-info-item', {
+      x: -30,
+      opacity: 0,
+      stagger: 0.12,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.contact-info',
+        start: 'top 88%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Form card slides up
+    gsap.from('.contact-form-card', {
+      y: 60,
+      opacity: 0,
+      rotationX: 5,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.contact-form-card',
+        start: 'top 88%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Form fields stagger in
+    gsap.from('.contact-field', {
+      y: 20,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.6,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.contact-form-card',
+        start: 'top 82%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Background glow scales in
+    gsap.from('.contact-glow', {
+      scale: 0.5,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+  }, { scope: sectionRef });
+
   return (
-    <section id="contact" className="py-24 md:py-32 relative overflow-hidden">
+    <section id="contact" ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden" style={{ perspective: '1000px' }}>
       {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="contact-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight mb-6">
-              Let's build something <br />
+          <div className="contact-left">
+            <h2 className="contact-heading text-4xl md:text-6xl font-display font-bold tracking-tight mb-6" style={{ perspective: '600px' }}>
+              Let's build something {' '}
               <span className="text-zinc-500">extraordinary.</span>
             </h2>
-            <p className="text-zinc-400 text-lg mb-10 max-w-md">
+            <p className="contact-subtitle text-zinc-400 text-lg mb-10 max-w-md">
               Have a project in mind or just want to chat? Feel free to reach out. I'm currently open to new opportunities.
             </p>
 
-            <div className="space-y-6">
-              <div>
+            <div className="contact-info space-y-6">
+              <div className="contact-info-item">
                 <p className="text-sm text-zinc-500 uppercase tracking-wider font-medium mb-2">Email</p>
                 <a href="mailto:sarkhelranit2001@gmail.com" className="text-xl text-zinc-100 hover:text-emerald-400 transition-colors">
                   sarkhelranit2001@gmail.com
                 </a>
               </div>
-              <div>
+              <div className="contact-info-item">
                 <p className="text-sm text-zinc-500 uppercase tracking-wider font-medium mb-2">Location</p>
                 <p className="text-xl text-zinc-100">
                   Kolkata, West Bengal <span className="text-zinc-500 text-base">(Remote)</span>
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-zinc-900/50 border border-zinc-800/50 p-8 rounded-3xl backdrop-blur-sm"
+          <div
+            className="contact-form-card bg-zinc-900/50 border border-zinc-800/50 p-8 rounded-3xl backdrop-blur-sm"
           >
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="contact-field grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium text-zinc-400">Name</label>
                   <input
@@ -114,7 +201,7 @@ export function Contact() {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="contact-field space-y-2">
                 <label htmlFor="subject" className="text-sm font-medium text-zinc-400">Subject</label>
                 <input
                   type="text"
@@ -126,7 +213,7 @@ export function Contact() {
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="contact-field space-y-2">
                 <label htmlFor="message" className="text-sm font-medium text-zinc-400">Message</label>
                 <textarea
                   id="message"
@@ -223,7 +310,7 @@ export function Contact() {
                 </div>
               </button>
             </form>
-          </motion.div>
+          </div>
 
         </div>
       </div>
