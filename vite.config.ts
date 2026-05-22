@@ -66,6 +66,9 @@ export default defineConfig(({ mode }) => {
               if (id.includes('@splinetool')) {
                 return 'spline';
               }
+              if (id.includes('three') || id.includes('@react-three')) {
+                return 'three';
+              }
               if (id.includes('motion')) {
                 return 'motion';
               }

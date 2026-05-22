@@ -2,9 +2,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import GooeyNav from '../../components/GooeyNav';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
 export function Navbar() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -51,12 +52,19 @@ export function Navbar() {
   ];
 
   const scrollToSection = (hash: string) => {
-    const target = document.querySelector(hash) as HTMLElement | null;
-    if (!target) return;
-    window.scrollTo({
-      top: window.scrollY + target.getBoundingClientRect().top,
-      behavior: 'smooth',
-    });
+    const smoother = typeof window !== 'undefined' ? ScrollSmoother.get() : null;
+    if (smoother) {
+      smoother.scrollTo(hash, true, 'top top');
+    } else {
+      const target = document.querySelector(hash) as HTMLElement | null;
+      if (!target) return;
+      const offset = 80;
+      const targetPosition = window.scrollY + target.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth',
+      });
+    }
   };
 
   return (
@@ -97,34 +105,34 @@ export function Navbar() {
             </button>
           </div>
         </div>
-      </motion.nav>
 
-      {/* Mobile Nav Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-[90px] left-1/2 -translate-x-1/2 w-[90%] max-w-[800px] z-40 bg-zinc-950/95 backdrop-blur-md border border-zinc-800/50 rounded-xl p-6 flex flex-col gap-4 md:hidden"
-          >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsMobileMenuOpen(false);
-                  scrollToSection(link.href);
-                }}
-                className="text-lg font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Mobile Nav Menu rendered inside motion.nav */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute top-[calc(100%+8px)] left-0 right-0 z-40 bg-zinc-950/95 backdrop-blur-md border border-zinc-800/50 rounded-xl p-6 flex flex-col gap-4 md:hidden"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMobileMenuOpen(false);
+                    scrollToSection(link.href);
+                  }}
+                  className="text-lg font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
+                >
+                  {link.name}
+                </a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
     </>
   );
 }

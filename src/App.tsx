@@ -4,9 +4,7 @@
  */
 
 import { Navbar } from './components/Navbar';
-import { SplineHero } from './components/SplineHero';
 import { Hero } from './components/Hero';
-
 
 import { About } from './components/About';
 import { Experience } from './components/Experience';
@@ -14,17 +12,19 @@ import { Credentials } from './components/Credentials';
 import { Projects } from './components/Projects';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import LiquidEther from '../components/LiquidEther';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
+
+const SplineHero = lazy(() => import('./components/SplineHero').then(m => ({ default: m.SplineHero })));
+const LiquidEther = lazy(() => import('../components/LiquidEther'));
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export default function App() {
   const [showEther, setShowEther] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 1024 : true);
   const smootherRef = useRef<ScrollSmoother | null>(null);
 
   useEffect(() => {
@@ -78,23 +78,25 @@ export default function App() {
       >
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
           {showEther && isDesktop && (
-            <LiquidEther
-              colors={['#5227FF', '#FF9FFC', '#B19EEF']}
-              mouseForce={20}
-              cursorSize={55}
-              isViscous
-              viscous={30}
-              iterationsViscous={8}
-              iterationsPoisson={8}
-              resolution={0.25}
-              isBounce={false}
-              autoDemo
-              autoSpeed={0.5}
-              autoIntensity={2.2}
-              takeoverDuration={0.25}
-              autoResumeDelay={3000}
-              autoRampDuration={0.6}
-            />
+            <Suspense fallback={null}>
+              <LiquidEther
+                colors={['#5227FF', '#FF9FFC', '#B19EEF']}
+                mouseForce={20}
+                cursorSize={55}
+                isViscous
+                viscous={30}
+                iterationsViscous={8}
+                iterationsPoisson={8}
+                resolution={0.25}
+                isBounce={false}
+                autoDemo
+                autoSpeed={0.5}
+                autoIntensity={2.2}
+                takeoverDuration={0.25}
+                autoResumeDelay={3000}
+                autoRampDuration={0.6}
+              />
+            </Suspense>
           )}
         </div>
       </div>
@@ -105,7 +107,11 @@ export default function App() {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main className="relative z-10 min-h-screen text-zinc-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
-            <SplineHero />
+            {isDesktop && (
+              <Suspense fallback={null}>
+                <SplineHero />
+              </Suspense>
+            )}
             <Hero />
 
             <About />
