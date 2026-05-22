@@ -2,9 +2,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import GooeyNav from '../../components/GooeyNav';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
 export function Navbar() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -15,22 +16,27 @@ export function Navbar() {
     }
 
     const handleScroll = () => {
-      // Reveal navbar after scrolling down some distance on desktop, always visible on mobile
+      const heroEl = document.getElementById('home');
       if (window.innerWidth >= 1024) {
-        setIsVisible(window.scrollY > 100);
+        if (heroEl) {
+          const rect = heroEl.getBoundingClientRect();
+          // Show navbar once the Hero section is near or in the viewport
+          setIsVisible(rect.top < window.innerHeight * 0.8);
+        } else {
+          setIsVisible(window.scrollY > 100);
+        }
       }
-      // Change background style after some scroll
       setIsScrolled(window.scrollY > 50);
     };
 
-    // Listen for resize to update visibility if screen changes
     const handleResize = () => {
       if (window.innerWidth < 1024) setIsVisible(true);
-      else setIsVisible(window.scrollY > 100);
+      else handleScroll();
     }
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
+    handleScroll();
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
@@ -45,6 +51,22 @@ export function Navbar() {
     { name: 'Contact', href: '#contact' },
   ];
 
+  const scrollToSection = (hash: string) => {
+    const smoother = typeof window !== 'undefined' ? ScrollSmoother.get() : null;
+    if (smoother) {
+      smoother.scrollTo(hash, true, 'top top');
+    } else {
+      const target = document.querySelector(hash) as HTMLElement | null;
+      if (!target) return;
+      const offset = 80;
+      const targetPosition = window.scrollY + target.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <>
       <motion.nav
@@ -56,12 +78,12 @@ export function Navbar() {
             : 'top-8 bg-zinc-950/40 backdrop-blur-sm border-white/10 py-3'
           }`}
       >
-        <div className="flex items-center justify-between w-full px-4 md:px-6 h-[44px]">
+        <div className="flex items-center justify-between w-full px-4 md:px-6 h-12">
 
           {/* Left: Logo */}
-          <div className="flex-1 flex justify-start">
+          <div className="flex-1 flex justify-start items-center">
             <a href="#home" className="flex items-center">
-              <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-12 w-auto object-contain mix-blend-screen" />
+              <img src="/logo-v2.png" alt="Ranit Sarkhel" className="!h-10 md:!h-12 w-auto object-contain mix-blend-screen" />
             </a>
           </div>
 
@@ -69,6 +91,7 @@ export function Navbar() {
           <div className="hidden md:flex flex-[2] justify-center items-center">
             <GooeyNav
               items={navLinks.map(link => ({ label: link.name, href: link.href }))}
+              onItemClick={scrollToSection}
             />
           </div>
 
@@ -76,36 +99,40 @@ export function Navbar() {
           <div className="flex flex-1 justify-end md:hidden">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-zinc-400 hover:text-zinc-100 transition-colors focus:outline-none"
+              className="p-1 md:p-2 text-zinc-400 hover:text-zinc-100 transition-colors focus:outline-none"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
-      </motion.nav>
 
-      {/* Mobile Nav Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-[90px] left-1/2 -translate-x-1/2 w-[90%] max-w-[800px] z-40 bg-zinc-950/95 backdrop-blur-md border border-zinc-800/50 rounded-xl p-6 flex flex-col gap-4 md:hidden"
-          >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Mobile Nav Menu rendered inside motion.nav */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute top-[calc(100%+8px)] left-0 right-0 z-40 bg-zinc-950/95 backdrop-blur-md border border-zinc-800/50 rounded-xl p-6 flex flex-col gap-4 md:hidden"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMobileMenuOpen(false);
+                    scrollToSection(link.href);
+                  }}
+                  className="text-lg font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
+                >
+                  {link.name}
+                </a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
     </>
   );
 }

@@ -9,7 +9,8 @@ const GooeyNav = ({
   particleR = 100,
   timeVariance = 300,
   colors = [1, 2, 3, 1, 2, 3, 1, 4],
-  initialActiveIndex = 0
+  initialActiveIndex = 0,
+  onItemClick,
 }) => {
   const containerRef = useRef(null);
   const navRef = useRef(null);
@@ -93,9 +94,13 @@ const GooeyNav = ({
     textRef.current.innerText = element.innerText;
   };
 
-  const handleClick = (e, index) => {
+  const handleClick = (e, index, href) => {
+    e.preventDefault();
     const liEl = e.currentTarget;
-    if (activeIndex === index) return;
+    if (activeIndex === index) {
+      if (onItemClick) onItemClick(href);
+      return;
+    }
 
     setActiveIndex(index);
     updateEffectPosition(liEl);
@@ -115,15 +120,14 @@ const GooeyNav = ({
     if (filterRef.current) {
       makeParticles(filterRef.current);
     }
+
+    if (onItemClick) onItemClick(href);
   };
 
-  const handleKeyDown = (e, index) => {
+  const handleKeyDown = (e, index, href) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      const liEl = e.currentTarget.parentElement;
-      if (liEl) {
-        handleClick({ currentTarget: liEl }, index);
-      }
+      handleClick(e, index, href);
     }
   };
 
@@ -152,7 +156,11 @@ const GooeyNav = ({
         <ul ref={navRef}>
           {items.map((item, index) => (
             <li key={index} className={activeIndex === index ? 'active' : ''}>
-              <a href={item.href} onClick={e => handleClick(e, index)} onKeyDown={e => handleKeyDown(e, index)}>
+              <a
+                href={item.href}
+                onClick={e => handleClick(e, index, item.href)}
+                onKeyDown={e => handleKeyDown(e, index, item.href)}
+              >
                 {item.label}
               </a>
             </li>

@@ -1,6 +1,12 @@
 import { useScroll, useTransform, motion } from "motion/react";
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const projects = [
   {
@@ -67,30 +73,102 @@ export function Projects() {
   const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
   const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
+  // GSAP animations
+  useGSAP(() => {
+    // Section heading — SplitText by words
+    const headingSplit = SplitText.create('.projects-title', {
+      type: 'words',
+    });
+
+    gsap.from(headingSplit.words, {
+      y: 50,
+      opacity: 0,
+      rotationX: -40,
+      stagger: 0.05,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.projects-header',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Subtitle
+    gsap.from('.projects-subtitle', {
+      y: 25,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.projects-header',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // "View Archive" link slides in from right
+    gsap.from('.projects-archive-link', {
+      x: 30,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.projects-header',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Each project card: clip-path cinematic reveal + scale
+    const projectCards = gsap.utils.toArray<HTMLElement>('.project-card');
+    projectCards.forEach((card) => {
+      gsap.from(card, {
+        clipPath: 'inset(100% 0% 0% 0%)',
+        scale: 1.08,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      });
+    });
+
+    // Project description blocks fade up
+    const projectDescs = gsap.utils.toArray<HTMLElement>('.project-desc');
+    projectDescs.forEach((desc) => {
+      gsap.from(desc, {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: desc,
+          start: 'top 88%',
+          toggleActions: 'play none none none',
+        },
+      });
+    });
+
+  }, { scope: containerRef });
+
   return (
     <section id="projects" className="py-24 md:py-32 bg-zinc-950 font-sans" ref={containerRef}>
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-4 text-zinc-100">Selected Work</h2>
-            <p className="text-zinc-400 text-lg max-w-md">A collection of my recent projects focusing on automation, security, and interactive experiences.</p>
-          </motion.div>
+        <div className="projects-header flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div>
+            <h2 className="projects-title text-3xl md:text-5xl font-display font-bold tracking-tight mb-4 text-zinc-100" style={{ perspective: '600px' }}>Selected Work</h2>
+            <p className="projects-subtitle text-zinc-400 text-lg max-w-md">A collection of my recent projects focusing on automation, security, and interactive experiences.</p>
+          </div>
 
-          <motion.a
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <a
             href="#"
-            className="inline-flex items-center gap-2 text-zinc-100 hover:text-emerald-400 transition-colors font-medium"
+            className="projects-archive-link inline-flex items-center gap-2 text-zinc-100 hover:text-emerald-400 transition-colors font-medium"
           >
             View Archive <ArrowUpRight size={18} />
-          </motion.a>
+          </a>
         </div>
 
         <div ref={ref} className="relative mx-auto pb-20 mt-6 md:mt-12">
@@ -118,16 +196,13 @@ export function Projects() {
                 </div>
 
                 {/* Project Image Card */}
-                <div className={`relative w-full md:w-[calc(50%-3rem)] flex flex-col pl-14 md:pl-0 ${isLeft ? 'md:items-end' : 'md:items-start'}`}>
-                  <motion.a
+                <div className={`relative w-full md:w-[calc(50%-3rem)] flex flex-col mt-4 md:mt-0 pl-14 md:pl-0 ${isLeft ? 'md:items-end' : 'md:items-start'}`}>
+                  <a
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.6 }}
-                    className="relative rounded-3xl overflow-hidden bg-zinc-900 border border-zinc-800/50 block w-full max-w-xl group/card"
+                    className="project-card relative rounded-3xl overflow-hidden bg-zinc-900 border border-zinc-800/50 block w-full max-w-xl group/card"
+                    style={{ clipPath: 'inset(0% 0% 0% 0%)' }}
                   >
                     <div className="aspect-[16/10] overflow-hidden relative">
                       <div className={`absolute inset-0 bg-gradient-to-b ${project.color} z-10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500`}></div>
@@ -135,6 +210,7 @@ export function Projects() {
                         src={project.image}
                         alt={project.title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+                        data-speed="0.95"
                         referrerPolicy="no-referrer"
                       />
                     </div>
@@ -150,17 +226,13 @@ export function Projects() {
                         </div>
                       </div>
                     </div>
-                  </motion.a>
+                  </a>
                 </div>
 
                 {/* Project Description Text */}
-                <div className={`relative w-full md:w-[calc(50%-3rem)] flex flex-col justify-center pl-14 md:pl-0 mt-6 md:mt-12 ${isLeft ? 'md:items-start md:text-left' : 'md:items-end md:text-right'}`}>
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="max-w-md flex flex-col"
+                <div className={`relative w-full md:w-[calc(50%-3rem)] flex flex-col justify-center mt-6 md:mt-12 pl-14 md:pl-0 ${isLeft ? 'md:items-start md:text-left' : 'md:items-end md:text-right'}`}>
+                  <div 
+                    className="project-desc max-w-md flex flex-col"
                   >
                     <p className="text-emerald-400 font-medium mb-3 hidden md:block tracking-wide text-sm">{project.category}</p>
                     <h3 className="text-2xl font-display font-bold text-zinc-100 mb-4 hidden md:block">{project.title}</h3>
@@ -170,7 +242,7 @@ export function Projects() {
                     <div className="mt-6 flex gap-4 md:hidden">
                        <a className="inline-flex items-center gap-2 group/link hover:text-emerald-400 transition-colors text-zinc-100 text-sm font-medium" href={project.link} target="_blank" rel="noopener noreferrer">View Details <ArrowUpRight size={16} className="transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 transition-transform text-emerald-500" /></a>
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             );
