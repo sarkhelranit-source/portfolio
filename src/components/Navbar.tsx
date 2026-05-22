@@ -83,7 +83,7 @@ export function Navbar() {
           {/* Left: Logo */}
           <div className="flex-1 flex justify-start items-center">
             <a href="#home" className="flex items-center">
-              <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-10 md:h-12 w-auto object-contain mix-blend-screen" />
+              <img src="/logo-v2.png" alt="Ranit Sarkhel" className="!h-10 md:!h-12 w-auto object-contain mix-blend-screen" />
             </a>
           </div>
 

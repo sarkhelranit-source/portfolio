@@ -45,7 +45,7 @@ export function Footer() {
 
         <div className="footer-brand flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-2 text-center sm:text-left">
           <a href="#home" className="flex items-center">
-            <img src="/logo-v2.png" alt="Ranit Sarkhel" className="h-12 md:h-14 w-auto object-contain mix-blend-screen -mx-2" />
+            <img src="/logo-v2.png" alt="Ranit Sarkhel" className="!h-12 md:!h-14 w-auto object-contain mix-blend-screen -mx-2" />
           </a>
           <span className="text-zinc-600 text-sm ml-0 sm:ml-4 sm:border-l sm:border-zinc-800/80 sm:pl-4">
             © {new Date().getFullYear()} Ranit Sarkhel
