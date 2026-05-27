@@ -55,7 +55,7 @@ const experiences = [
 
 export function Experience() {
     return (
-        <section id="experience" className="py-24 md:py-32 relative z-20 bg-zinc-950">
+        <section id="experience" className="py-24 md:py-32 relative z-20">
             <Timeline data={experiences} />
         </section>
     );

@@ -19,6 +19,7 @@ import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
 const SplineHero = lazy(() => import('./components/SplineHero').then(m => ({ default: m.SplineHero })));
 const LiquidEther = lazy(() => import('../components/LiquidEther'));
+const DarkVeil = lazy(() => import('./components/DarkVeil'));
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
@@ -71,9 +72,18 @@ export default function App() {
     <>
       {/* Fixed elements — OUTSIDE the smooth wrapper so they don't get smoothed */}
 
+      {/* Fixed DarkVeil background — always visible behind everything */}
+      <div className="fixed inset-0 z-[-2] pointer-events-none">
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+          <Suspense fallback={null}>
+            <DarkVeil speed={1} />
+          </Suspense>
+        </div>
+      </div>
+
       {/* Background LiquidEther */}
       <div
-        className="fixed inset-0 z-[-1] bg-zinc-950 pointer-events-none"
+        className="fixed inset-0 z-[-1] pointer-events-none"
         style={{ display: showEther ? 'block' : 'none' }}
       >
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -116,7 +126,7 @@ export default function App() {
 
             <About />
             <Experience />
-            <div className="relative z-20 bg-zinc-950">
+            <div className="relative z-20">
               <Credentials />
               <Projects />
               <Contact />

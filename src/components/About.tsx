@@ -1,34 +1,71 @@
 import { useRef } from 'react';
-import { Code2, Palette, Zap, Globe } from 'lucide-react';
+import CardSwap, { Card } from './CardSwap';
+import { Shield, Cloud, Container, Bot } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
+gsap.registerPlugin(ScrollTrigger);
 
 const skills = [
-  { name: 'AWS Cloud Services', icon: <Globe size={20} />, desc: 'EC2, IAM, S3, architecture and implementation' },
-  { name: 'Infrastructure & Security', icon: <Zap size={20} />, desc: 'AWS Security, Least Privileged Access, Wazuh' },
-  { name: 'Containerization', icon: <Code2 size={20} />, desc: 'Docker, Docker Compose, Microservices and Networking' },
-  { name: 'AI & Automation', icon: <Palette size={20} />, desc: 'Agentic Automation, n8n workflow creation' },
+  {
+    name: 'Cloud Architecture',
+    icon: <Cloud size={22} />,
+    tagline: '$ aws cloudformation deploy',
+    desc: 'Designing production-grade, scalable cloud infrastructure on AWS — from VPC networking and multi-AZ deployments to serverless event-driven architectures using Lambda, EventBridge, and SNS.',
+    highlights: ['Well-Architected', 'Multi-AZ', 'IaC'],
+    tools: ['EC2', 'S3', 'IAM', 'CloudFormation', 'Lambda'],
+    accent: '#FF9900',
+  },
+  {
+    name: 'Security & Compliance',
+    icon: <Shield size={22} />,
+    tagline: '$ wazuh-agent --status active',
+    desc: 'Implementing defense-in-depth security strategies with IAM least-privilege policies, CloudTrail monitoring, real-time SIEM alerting via Wazuh, and automated incident response pipelines.',
+    highlights: ['Zero Trust', 'SIEM', 'Incident Response'],
+    tools: ['IAM', 'CloudTrail', 'Wazuh', 'GuardDuty', 'SNS'],
+    accent: '#10B981',
+  },
+  {
+    name: 'Containerization',
+    icon: <Container size={22} />,
+    tagline: '$ docker compose up -d --build',
+    desc: 'Architecting microservices environments with Docker and Kubernetes for consistent, portable deployments. Building container networking, orchestrating multi-service stacks, and managing production clusters.',
+    highlights: ['Microservices', 'Orchestration', 'Networking'],
+    tools: ['Docker', 'K8s', 'Compose', 'Linux', 'Nginx'],
+    accent: '#2496ED',
+  },
+  {
+    name: 'AI & Automation',
+    icon: <Bot size={22} />,
+    tagline: '$ n8n start --tunnel',
+    desc: 'Building intelligent automation agents and conversational AI bots for Discord and Telegram, powered by n8n workflows, LangChain, and Google Gemini — with Redis knowledge graphs and webhook integrations.',
+    highlights: ['Agentic AI', 'Workflows', 'Bots'],
+    tools: ['n8n', 'LangChain', 'Gemini', 'Python', 'Redis'],
+    accent: '#A78BFA',
+  },
 ];
 
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
-    // Existing SVG draw animation
-    gsap.from('.about-draw', {
-      drawSVG: "0%",
-      ease: "none",
-      scrollTrigger: {
-        trigger: '.about-heading',
-        start: "top 80%",
-        end: "top 20%",
-        scrub: true,
-      }
+    // Native SVG draw animation using getTotalLength()
+    const paths = gsap.utils.toArray('.about-draw') as SVGPathElement[];
+    paths.forEach((path) => {
+      const length = path.getTotalLength();
+      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+      gsap.to(path, {
+        strokeDashoffset: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: '.about-heading',
+          start: "top 80%",
+          end: "top 20%",
+          scrub: true,
+        }
+      });
     });
 
     // Heading — fade up (without SplitText to preserve the SVG circle structure)
@@ -72,24 +109,12 @@ export function About() {
       },
     });
 
-    // Skill cards — staggered fly up
-    gsap.from('.skill-card', {
-      y: 60,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 0.7,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.skill-cards-grid',
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-    });
+    // Skill cards — no longer using GSAP stagger since CardSwap handles its own animation
 
   }, { scope: sectionRef });
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 md:py-32 relative z-20 bg-zinc-950">
+    <section id="about" ref={sectionRef} className="py-24 md:py-32 relative z-20">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Centered Heading with SVG draw animation */}
@@ -138,20 +163,79 @@ export function About() {
           </div>
         </div>
 
-        {/* Horizontal Skill Cards */}
-        <div className="skill-cards-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {skills.map((skill) => (
-            <div
-              key={skill.name}
-              className="skill-card p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-800/50 transition-colors"
-            >
-              <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-100 mb-4">
-                {skill.icon}
-              </div>
-              <h3 className="text-lg font-medium text-zinc-100 mb-2">{skill.name}</h3>
-              <p className="text-sm text-zinc-400">{skill.desc}</p>
-            </div>
-          ))}
+        {/* Skill Cards — CardSwap */}
+        <div className="relative w-full h-[550px] sm:h-[600px] md:h-[650px] flex items-center justify-center">
+          <CardSwap
+            cardDistance={55}
+            verticalDistance={65}
+            delay={4000}
+            pauseOnHover={true}
+            easing="elastic"
+            width={650}
+            height={400}
+          >
+            {skills.map((skill) => (
+              <Card
+                key={skill.name}
+                className="p-0 rounded-2xl bg-zinc-950 shadow-2xl flex flex-col overflow-hidden"
+                style={{ border: `1px solid ${skill.accent}25` }}
+              >
+                {/* Top accent bar */}
+                <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${skill.accent}, transparent)` }} />
+
+                <div className="flex flex-col justify-between h-full p-7 sm:p-8">
+                  {/* Header row */}
+                  <div className="flex items-start justify-between mb-5">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-11 h-11 rounded-xl flex items-center justify-center"
+                        style={{ background: `${skill.accent}18`, color: skill.accent, boxShadow: `0 0 20px ${skill.accent}15` }}
+                      >
+                        {skill.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-lg sm:text-xl font-bold text-zinc-100 tracking-tight">{skill.name}</h3>
+                        <code className="text-[11px] font-mono text-zinc-600 block mt-0.5">{skill.tagline}</code>
+                      </div>
+                    </div>
+                    {/* Status dot */}
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: skill.accent, boxShadow: `0 0 8px ${skill.accent}` }} />
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">Active</span>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-zinc-400 leading-relaxed mb-5">{skill.desc}</p>
+
+                  {/* Highlights */}
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {skill.highlights.map((h) => (
+                      <span
+                        key={h}
+                        className="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md"
+                        style={{ background: `${skill.accent}12`, color: skill.accent, border: `1px solid ${skill.accent}30` }}
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Bottom toolbar */}
+                  <div className="flex items-center justify-between pt-4 border-t border-zinc-800/60">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {skill.tools.map((t) => (
+                        <span key={t} className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-500 border border-zinc-800/50">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-[10px] text-zinc-600 font-mono">click to swap →</span>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </CardSwap>
         </div>
 
       </div>
