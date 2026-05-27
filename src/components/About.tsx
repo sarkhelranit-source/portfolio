@@ -49,14 +49,14 @@ const skills = [
 
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
 
   useGSAP(() => {
-    // Native SVG draw animation using getTotalLength()
-    const paths = gsap.utils.toArray('.about-draw') as SVGPathElement[];
-    paths.forEach((path) => {
-      const length = path.getTotalLength();
-      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-      gsap.to(path, {
+    // Native SVG draw animation using direct ref
+    if (pathRef.current) {
+      const length = pathRef.current.getTotalLength();
+      gsap.set(pathRef.current, { strokeDasharray: length, strokeDashoffset: length });
+      gsap.to(pathRef.current, {
         strokeDashoffset: 0,
         ease: "none",
         scrollTrigger: {
@@ -66,7 +66,7 @@ export function About() {
           scrub: true,
         }
       });
-    });
+    }
 
     // Heading — fade up (without SplitText to preserve the SVG circle structure)
     gsap.from('.about-heading h2', {
@@ -130,6 +130,7 @@ export function About() {
                 viewBox="0 0 842.14 500"
               >
                 <path
+                  ref={pathRef}
                   className="about-draw"
                   d="M336.2,130.05C261.69,118,16.52,122,20.65,244.29c4.17,123,484.3,299.8,734.57,108.37,244-186.65-337.91-311-546.54-268.47"
                   fill="none"
