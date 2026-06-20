@@ -1,10 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import { Shield, Cloud, Container, Bot } from 'lucide-react';
 import { FaAws, FaDocker, FaLinux, FaGitAlt, FaPython, FaFigma } from 'react-icons/fa';
 import { SiKubernetes, SiTerraform, SiNginx, SiRedis, SiN8N } from 'react-icons/si';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { useGSAP } from '@gsap/react';
+import ProfileCard from './ProfileCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -64,6 +66,15 @@ const techLogos = [
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
 
+  const scrollToContact = useCallback(() => {
+    const smoother = ScrollSmoother.get();
+    if (smoother) {
+      smoother.scrollTo('#contact', true, 'top top');
+    } else {
+      document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
   useGSAP(() => {
     // Section label
     gsap.from('.about-label', {
@@ -78,7 +89,7 @@ export function About() {
       },
     });
 
-    // Heading reveal
+    // Profile card reveal
     gsap.from('.about-heading-text', {
       y: 60,
       opacity: 0,
@@ -86,7 +97,7 @@ export function About() {
       ease: 'power3.out',
       scrollTrigger: {
         trigger: '.about-intro',
-        start: 'top 85%',
+        start: 'top 95%',
         toggleActions: 'play none none none',
       },
     });
@@ -100,7 +111,7 @@ export function About() {
       ease: 'power2.out',
       scrollTrigger: {
         trigger: '.about-description',
-        start: 'top 88%',
+        start: 'top 95%',
         toggleActions: 'play none none none',
       },
     });
@@ -115,7 +126,7 @@ export function About() {
       ease: 'power3.out',
       scrollTrigger: {
         trigger: '.skills-grid',
-        start: 'top 85%',
+        start: 'top 95%',
         toggleActions: 'play none none none',
       },
     });
@@ -148,17 +159,23 @@ export function About() {
         </div>
 
         {/* Intro: Heading + Description side by side on desktop */}
-        <div className="about-intro grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 mb-20 md:mb-28">
+        <div className="about-intro grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-20 md:mb-28">
 
-          {/* Left — Heading with SVG */}
-          <div className="about-heading-text relative">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-[1.1]">
-              <span className="relative inline-block">
-                AWS Engineer
-              </span>
-              <br />
-              <span className="text-zinc-500">at Moresco.</span>
-            </h2>
+          {/* Left — Profile Card */}
+          <div className="about-heading-text relative flex items-center justify-center lg:justify-start">
+            <ProfileCard
+              avatarUrl="/headshot.png"
+              name="Ranit Sarkhel"
+              title="AWS Cloud Engineer"
+              handle="sarkhelranit"
+              status="Available for work"
+              contactText="Contact"
+              onContactClick={scrollToContact}
+              enableTilt={true}
+              behindGlowColor="rgba(82, 39, 255, 0.4)"
+              innerGradient="linear-gradient(145deg, #1a1a2e8c 0%, #16213e44 100%)"
+              className="w-full max-w-[320px] lg:max-w-[360px]"
+            />
           </div>
 
           {/* Right — Description */}
@@ -173,33 +190,58 @@ export function About() {
         </div>
 
         {/* Skills Grid — 2×2 */}
-        <div className="skills-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mb-16 md:mb-24">
+        <div 
+          className="skills-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mb-16 md:mb-24"
+          onMouseMove={(e) => {
+            for (const card of document.getElementsByClassName('skill-card-hover-wrapper')) {
+              const rect = card.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+              (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
+              (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
+            }
+          }}
+        >
           {skills.map((skill) => (
             <div
               key={skill.name}
-              className="skill-card group relative rounded-2xl overflow-hidden transition-all duration-500"
+              className="skill-card skill-card-hover-wrapper group relative rounded-2xl transition-all duration-500 p-[1px]"
               style={{
-                background: 'linear-gradient(135deg, rgba(24,24,27,0.9) 0%, rgba(9,9,11,0.95) 100%)',
-                border: `1px solid rgba(63,63,70,0.4)`,
+                backgroundColor: 'rgba(63,63,70,0.4)',
               }}
             >
-              {/* Hover glow overlay */}
+              {/* Border hover glow */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
                 style={{
-                  background: `radial-gradient(600px circle at 50% 0%, ${skill.accent}08, transparent 60%)`,
+                  background: `radial-gradient(400px circle at var(--mouse-x, 0) var(--mouse-y, 0), ${skill.accent}80, transparent 40%)`,
                 }}
               />
 
-              {/* Top accent line */}
-              <div
-                className="h-px w-full"
+              {/* Inner content wrapper */}
+              <div 
+                className="relative h-full w-full rounded-2xl overflow-hidden flex flex-col"
                 style={{
-                  background: `linear-gradient(90deg, transparent, ${skill.accent}60, transparent)`,
+                  background: 'linear-gradient(135deg, rgba(24,24,27,0.9) 0%, rgba(9,9,11,0.95) 100%)',
                 }}
-              />
+              >
+                {/* Inner hover glow overlay */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), ${skill.accent}0A, transparent 60%)`,
+                  }}
+                />
 
-              <div className="relative p-6 md:p-7 flex flex-col gap-4">
+                {/* Top accent line */}
+                <div
+                  className="h-px w-full shrink-0"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, ${skill.accent}60, transparent)`,
+                  }}
+                />
+
+                <div className="relative p-6 md:p-7 flex flex-col gap-4 grow">
                 {/* Header */}
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
@@ -259,6 +301,7 @@ export function About() {
                 </div>
               </div>
             </div>
+          </div>
           ))}
         </div>
 
