@@ -85,7 +85,7 @@ export function Credentials() {
             <div className="max-w-5xl mx-auto px-6 md:px-12 relative z-10">
                 {/* Header and Toggle */}
                 <div className="cred-header flex flex-col items-center justify-center mb-16 space-y-6">
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mt-2">
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-5 mt-2">
                         <h2 
                             className={`cred-heading text-3xl sm:text-4xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${!isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
                             onClick={() => setIsAppMode(false)}
@@ -124,10 +124,13 @@ export function Credentials() {
                         return (
                             <a
                                 key={index}
-                                href={cert.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="cred-item block"
+                                href={isAppMode ? cert.link : undefined}
+                                target={isAppMode ? "_blank" : undefined}
+                                rel={isAppMode ? "noopener noreferrer" : undefined}
+                                className={`cred-item block ${!isAppMode ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                onClick={(e) => {
+                                    if (!isAppMode) e.preventDefault();
+                                }}
                             >
                                 <motion.div 
                                     className="flex items-center justify-between p-4 md:p-5 rounded-xl transition-all duration-300 relative overflow-hidden group"

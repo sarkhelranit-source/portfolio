@@ -137,14 +137,14 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
         {data.map((item, index) => (
           <div
             key={index}
-            className="timeline-entry flex justify-start pt-10 md:pt-24 md:gap-10"
+            className="timeline-entry flex justify-start pt-10 md:pt-24 md:gap-4 lg:gap-8"
           >
-            <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full">
+            <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start md:w-64 lg:w-72 shrink-0">
               <div className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-zinc-950 flex items-center justify-center">
                 <div className="timeline-dot-inner h-4 w-4 rounded-full bg-zinc-800 border border-zinc-700 p-2" />
               </div>
               {item.logo ? (
-                <div className="timeline-entry-logo hidden md:flex md:pl-20 w-56 items-center justify-start">
+                <div className="timeline-entry-logo hidden md:flex md:pl-16 w-full items-center justify-start">
                   <img src={item.logo} alt={item.title} className="w-auto h-auto max-w-[120px] max-h-[60px] object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]" />
                 </div>
               ) : (

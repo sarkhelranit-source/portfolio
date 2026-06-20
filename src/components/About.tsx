@@ -138,7 +138,7 @@ export function About() {
   const marqueeLogos = [...techLogos, ...techLogos];
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 md:py-32 relative z-20">
+    <section id="about" ref={sectionRef} className="pt-24 md:pt-32 pb-12 md:pb-16 relative z-20">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Section Label */}
@@ -264,10 +264,6 @@ export function About() {
 
         {/* Tech Tags — Auto-scrolling Marquee */}
         <div className="marquee-container relative overflow-hidden py-6">
-          {/* Fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 md:w-32 z-10" style={{ background: 'linear-gradient(to right, #09090b, transparent)' }} />
-          <div className="absolute right-0 top-0 bottom-0 w-20 md:w-32 z-10" style={{ background: 'linear-gradient(to left, #09090b, transparent)' }} />
-
           <div className="marquee-track flex gap-10 md:gap-16 items-center animate-marquee">
             {marqueeLogos.map((tech, i) => (
               <div
