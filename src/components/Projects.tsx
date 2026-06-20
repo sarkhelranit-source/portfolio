@@ -29,6 +29,15 @@ const projects = [
     brief: "An advanced Discord command center modeled after Marvel's J.A.R.V.I.S., engineered atop n8n, LangChain, and Google Gemini. It autonomously fields mission directives with dynamic sub-systems for Redis knowledge graphs, Gmail summarization, metrics diagnostics, and real-time webhook operations."
   },
   {
+    id: 5,
+    title: 'Sniplink',
+    category: 'AWS / Serverless',
+    image: '/sniplink_architecture_v4.png',
+    accent: '#F472B6',
+    link: 'https://github.com/sarkhelranit-source/sniplink',
+    brief: "A production-grade, serverless URL shortening platform built entirely on AWS. It delivers instant edge-cached redirects via CloudFront, secure authentication with Cognito, and sub-50ms DynamoDB lookups—all managed through a responsive React dashboard."
+  },
+  {
     id: 3,
     title: 'Personal Telegram AI Agent',
     category: 'AI / n8n',
@@ -55,13 +64,10 @@ export function Projects() {
 
   // GSAP entrance animations
   useGSAP(() => {
-    const headingSplit = SplitText.create('.projects-title', { type: 'words' });
-
-    gsap.from(headingSplit.words, {
+    gsap.from('.projects-title', {
       y: 50,
       opacity: 0,
-      rotationX: -40,
-      stagger: 0.05,
+      rotationX: -20,
       duration: 0.8,
       ease: 'power3.out',
       scrollTrigger: {
@@ -154,7 +160,7 @@ export function Projects() {
   ));
 
   return (
-    <section id="projects" className="py-24 md:py-32 font-sans relative" ref={containerRef}>
+    <section id="projects" className="pt-24 md:pt-32 pb-12 md:pb-16 font-sans relative" ref={containerRef}>
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Header */}
         <div className="projects-header flex flex-col items-center text-center mb-16 md:mb-24 relative">
@@ -195,7 +201,7 @@ export function Projects() {
 
         {/* Folder View */}
         {!expanded && (
-          <div className="folder-container flex items-center justify-center pt-32 pb-16 md:pt-48 md:pb-24 gap-4 md:gap-16 w-full">
+          <div className="folder-container flex items-center justify-center pt-32 pb-8 md:pt-48 md:pb-12 gap-4 md:gap-16 w-full">
             {/* Left Text */}
             <div className="hidden md:block">
               <GradientText

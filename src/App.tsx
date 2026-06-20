@@ -118,7 +118,7 @@ export default function App() {
         <div id="smooth-content">
           <main className="relative z-10 min-h-screen text-zinc-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
             {isDesktop && (
-              <Suspense fallback={null}>
+              <Suspense fallback={<div className="h-screen w-full bg-zinc-950" />}>
                 <SplineHero />
               </Suspense>
             )}

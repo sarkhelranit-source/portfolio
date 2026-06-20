@@ -140,7 +140,7 @@ export function Contact() {
   }, { scope: sectionRef });
 
   return (
-    <section id="contact" ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden" style={{ perspective: '1000px' }}>
+    <section id="contact" ref={sectionRef} className="pt-12 md:pt-16 pb-24 md:pb-32 relative overflow-hidden" style={{ perspective: '1000px' }}>
       {/* Background glow */}
       <div className="contact-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 

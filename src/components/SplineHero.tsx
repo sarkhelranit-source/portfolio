@@ -40,14 +40,24 @@ export function SplineHero() {
     }
 
     const handleSplineLoad = (splineApp: any) => {
-        // Attempt to hide the Spline logo if possible through the API/DOM
-        const canvas = document.querySelector('.spline-canvas-container canvas');
-        if (canvas) {
-           const container = canvas.parentElement;
-           if(container && container.nextElementSibling) {
-               (container.nextElementSibling as HTMLElement).style.display = 'none';
-           }
-        }
+        // Aggressively attempt to hide the Spline logo through DOM manipulation
+        const hideLogo = () => {
+            const logos = document.querySelectorAll('#logo, a[href*="spline.design"]');
+            logos.forEach(logo => (logo as HTMLElement).style.display = 'none');
+            
+            const canvas = document.querySelector('.spline-canvas-container canvas');
+            if (canvas && canvas.parentElement) {
+                const container = canvas.parentElement;
+                const spl = container.querySelector('a');
+                if (spl) spl.style.display = 'none';
+                if (container.nextElementSibling) {
+                    (container.nextElementSibling as HTMLElement).style.display = 'none';
+                }
+            }
+        };
+        hideLogo();
+        setTimeout(hideLogo, 500);
+        setTimeout(hideLogo, 2000);
     };
 
     return (
