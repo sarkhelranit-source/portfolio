@@ -6,16 +6,15 @@ const experiences = [
         logo: '/companies/moresco.png',
         content: (
             <div>
-                <h3 className="text-xl font-bold text-zinc-100">AWS Cloud Support Executive</h3>
+                <h3 className="text-xl font-bold text-zinc-100">AWS Cloud Engineer</h3>
                 <span className="inline-block text-sm font-mono text-zinc-500 bg-zinc-900 px-3 py-1 rounded-full border border-zinc-800 mb-4 mt-2">
-                    2025 JUN - CONTINUE
+                    2025 Jun - Present
                 </span>
                 <ul className="space-y-2 mt-2">
                     {[
-                        'Daily Monitoring System Metrics on Client Production Servers',
-                        'Working on various cloud architecture and solutions',
-                        'Working with security monitoring tools like Wazuh',
-                        'Reporting and Automation Workflow Creation.'
+                        'Design and deploy cloud infrastructure on AWS, owning architecture decisions across the full lifecycle of production systems',
+                        'Maintain and secure cloud resources across live environments, ensuring reliability and compliance for sensitive workloads',
+                        'Monitor system health, respond to incidents, and continuously improve infrastructure for performance and cost efficiency'
                     ].map((item, j) => (
                         <li key={j} className="text-zinc-400 flex gap-2">
                             <span className="text-emerald-500 mt-1.5 w-1.5 h-1.5 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.8)] bg-emerald-500 shrink-0"></span>

@@ -1,9 +1,9 @@
 import { useRef } from 'react';
-import CardSwap, { Card } from './CardSwap';
 import { Shield, Cloud, Container, Bot } from 'lucide-react';
+import { FaAws, FaDocker, FaLinux, FaGitAlt, FaPython, FaFigma } from 'react-icons/fa';
+import { SiKubernetes, SiTerraform, SiNginx, SiRedis, SiN8N } from 'react-icons/si';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,25 +11,25 @@ gsap.registerPlugin(ScrollTrigger);
 const skills = [
   {
     name: 'Cloud Architecture',
-    icon: <Cloud size={22} />,
-    tagline: '$ aws cloudformation deploy',
-    desc: 'Designing production-grade, scalable cloud infrastructure on AWS — from VPC networking and multi-AZ deployments to serverless event-driven architectures using Lambda, EventBridge, and SNS.',
-    highlights: ['Well-Architected', 'Multi-AZ', 'IaC'],
-    tools: ['EC2', 'S3', 'IAM', 'CloudFormation', 'Lambda'],
+    icon: <Cloud size={20} />,
+    tagline: '$ cdk deploy --all',
+    desc: 'Designing serverless-first, highly scalable systems by treating infrastructure as software. Fluent in both declarative and imperative IaC to build resilient API backends, real-time WebSockets, and edge-optimized architectures.',
+    highlights: ['Serverless', 'IaC', 'Event-Driven'],
+    tools: ['AWS CDK', 'CloudFormation', 'Lambda', 'API Gateway', 'DynamoDB'],
     accent: '#FF9900',
   },
   {
     name: 'Security & Compliance',
-    icon: <Shield size={22} />,
-    tagline: '$ wazuh-agent --status active',
-    desc: 'Implementing defense-in-depth security strategies with IAM least-privilege policies, CloudTrail monitoring, real-time SIEM alerting via Wazuh, and automated incident response pipelines.',
-    highlights: ['Zero Trust', 'SIEM', 'Incident Response'],
-    tools: ['IAM', 'CloudTrail', 'Wazuh', 'GuardDuty', 'SNS'],
+    icon: <Shield size={20} />,
+    tagline: '$ aws wafv2 update-web-acl',
+    desc: 'Engineering defense-in-depth from the edge to the data layer. Implementing strict least-privilege IAM, zero-trust Origin Access Control (OAC), WAF rate-limiting, and default encryption to proactively minimize blast radius.',
+    highlights: ['Defense in Depth', 'Least Privilege', 'Zero Trust'],
+    tools: ['WAF', 'IAM', 'OAC', 'KMS', 'CloudFront'],
     accent: '#10B981',
   },
   {
     name: 'Containerization',
-    icon: <Container size={22} />,
+    icon: <Container size={20} />,
     tagline: '$ docker compose up -d --build',
     desc: 'Architecting microservices environments with Docker and Kubernetes for consistent, portable deployments. Building container networking, orchestrating multi-service stacks, and managing production clusters.',
     highlights: ['Microservices', 'Orchestration', 'Networking'],
@@ -38,7 +38,7 @@ const skills = [
   },
   {
     name: 'AI & Automation',
-    icon: <Bot size={22} />,
+    icon: <Bot size={20} />,
     tagline: '$ n8n start --tunnel',
     desc: 'Building intelligent automation agents and conversational AI bots for Discord and Telegram, powered by n8n workflows, LangChain, and Google Gemini — with Redis knowledge graphs and webhook integrations.',
     highlights: ['Agentic AI', 'Workflows', 'Bots'],
@@ -47,196 +47,238 @@ const skills = [
   },
 ];
 
+const techLogos = [
+  { name: 'AWS', icon: <FaAws size={40} /> },
+  { name: 'Docker', icon: <FaDocker size={40} /> },
+  { name: 'Linux', icon: <FaLinux size={40} /> },
+  { name: 'n8n', icon: <SiN8N size={40} /> },
+  { name: 'Kubernetes', icon: <SiKubernetes size={40} /> },
+  { name: 'Git', icon: <FaGitAlt size={40} /> },
+  { name: 'UI/UX', icon: <FaFigma size={40} /> },
+  { name: 'Python', icon: <FaPython size={40} /> },
+  { name: 'Terraform', icon: <SiTerraform size={40} /> },
+  { name: 'Nginx', icon: <SiNginx size={40} /> },
+  { name: 'Redis', icon: <SiRedis size={40} /> },
+];
+
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
 
   useGSAP(() => {
-    // Native SVG draw animation using direct ref
-    if (pathRef.current) {
-      const length = pathRef.current.getTotalLength();
-      gsap.set(pathRef.current, { strokeDasharray: length, strokeDashoffset: length });
-      gsap.to(pathRef.current, {
-        strokeDashoffset: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: '.about-heading',
-          start: "top 80%",
-          end: "top 20%",
-          scrub: true,
-        }
-      });
-    }
+    // Section label
+    gsap.from('.about-label', {
+      y: 20,
+      opacity: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.about-label',
+        start: 'top 90%',
+        toggleActions: 'play none none none',
+      },
+    });
 
-    // Heading — fade up (without SplitText to preserve the SVG circle structure)
-    gsap.from('.about-heading h2', {
-      y: 50,
+    // Heading reveal
+    gsap.from('.about-heading-text', {
+      y: 60,
       opacity: 0,
       duration: 1,
       ease: 'power3.out',
       scrollTrigger: {
-        trigger: '.about-heading',
+        trigger: '.about-intro',
         start: 'top 85%',
         toggleActions: 'play none none none',
       },
     });
 
-    // Description paragraph
-    gsap.from('.about-description', {
+    // Description paragraphs
+    gsap.from('.about-desc-line', {
       y: 30,
       opacity: 0,
+      stagger: 0.15,
       duration: 0.8,
       ease: 'power2.out',
       scrollTrigger: {
         trigger: '.about-description',
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-    });
-
-    // Tech tags — staggered entrance
-    gsap.from('.about-tag', {
-      y: 20,
-      opacity: 0,
-      scale: 0.8,
-      stagger: 0.05,
-      duration: 0.6,
-      ease: 'back.out(1.7)',
-      scrollTrigger: {
-        trigger: '.about-tags',
         start: 'top 88%',
         toggleActions: 'play none none none',
       },
     });
 
-    // Skill cards — no longer using GSAP stagger since CardSwap handles its own animation
+    // Skill cards stagger
+    gsap.from('.skill-card', {
+      y: 60,
+      opacity: 0,
+      scale: 0.95,
+      stagger: 0.12,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.skills-grid',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
 
+    // Marquee fade-in
+    gsap.from('.marquee-container', {
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.marquee-container',
+        start: 'top 92%',
+        toggleActions: 'play none none none',
+      },
+    });
   }, { scope: sectionRef });
+
+  // Duplicate tech tags for seamless infinite scroll
+  const marqueeLogos = [...techLogos, ...techLogos];
 
   return (
     <section id="about" ref={sectionRef} className="py-24 md:py-32 relative z-20">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
-        {/* Centered Heading with SVG draw animation */}
-        <div className="about-heading relative z-[2] mb-8 md:mb-12">
-          <h2 className="relative text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-center uppercase" style={{ perspective: '600px' }}>
-            <span className="relative inline-block">
-              AWS Engineer
-              <svg
-                className="absolute pointer-events-none"
-                style={{ width: '112%', top: '50%', transform: 'translateY(-50%) rotate(2deg)', left: '-6%' }}
-                data-name="Layer 1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 842.14 500"
-              >
-                <path
-                  ref={pathRef}
-                  className="about-draw"
-                  d="M336.2,130.05C261.69,118,16.52,122,20.65,244.29c4.17,123,484.3,299.8,734.57,108.37,244-186.65-337.91-311-546.54-268.47"
-                  fill="none"
-                  stroke="#8486aa"
-                  strokeMiterlimit={10}
-                  strokeWidth={8}
-                />
-              </svg>
-            </span>
-            <br />
-            <span className="text-zinc-500">at Moresco Software Solutions.</span>
-          </h2>
+        {/* Section Label */}
+        <div className="about-label flex items-center gap-3 mb-10">
+          <span className="w-8 h-px bg-emerald-500" />
+          <span className="text-xs font-mono uppercase tracking-[0.25em] text-emerald-400">About Me</span>
         </div>
 
-        {/* Description + Tech Tags — centered */}
-        <div className="max-w-2xl mx-auto text-center mt-12 mb-16">
-          <p className="about-description text-zinc-400 text-lg leading-relaxed mb-8">
-            Passionate about driving efficiency and innovation in cloud computing, security, and automation.
-            Currently working as a Cloud Associate with deep expertise in AWS, Docker, and Linux.
-          </p>
+        {/* Intro: Heading + Description side by side on desktop */}
+        <div className="about-intro grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 mb-20 md:mb-28">
 
-          <div className="about-tags flex flex-wrap gap-3 justify-center">
-            {['AWS Services', 'Docker', 'Linux', 'n8n', 'Kubernetes', 'Git', 'UI/UX'].map((tech) => (
-              <span
-                key={tech}
-                className="about-tag px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-sm text-zinc-300"
-              >
-                {tech}
+          {/* Left — Heading with SVG */}
+          <div className="about-heading-text relative">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-[1.1]">
+              <span className="relative inline-block">
+                AWS Engineer
               </span>
-            ))}
+              <br />
+              <span className="text-zinc-500">at Moresco.</span>
+            </h2>
+          </div>
+
+          {/* Right — Description */}
+          <div className="about-description flex flex-col justify-center gap-5">
+            <p className="about-desc-line text-zinc-400 text-base md:text-lg leading-relaxed">
+              I'm an AWS engineer who builds and owns systems end to end from the first line of infrastructure to the moment something ships to users.
+            </p>
+            <p className="about-desc-line text-zinc-400 text-base md:text-lg leading-relaxed">
+              I think in terms of systems, not just services. Getting the architecture right matters to me, but so does making sure it stays maintainable, secure, and honest about its costs. Cloud infrastructure is easy to bloat; I find more satisfaction in building things that are lean and deliberate.
+            </p>
           </div>
         </div>
 
-        {/* Skill Cards — CardSwap */}
-        <div className="relative w-full h-[550px] sm:h-[600px] md:h-[650px] flex items-center justify-center">
-          <CardSwap
-            cardDistance={55}
-            verticalDistance={65}
-            delay={4000}
-            pauseOnHover={true}
-            easing="elastic"
-            width={650}
-            height={400}
-          >
-            {skills.map((skill) => (
-              <Card
-                key={skill.name}
-                className="p-0 rounded-2xl bg-zinc-950 shadow-2xl flex flex-col overflow-hidden"
-                style={{ border: `1px solid ${skill.accent}25` }}
-              >
-                {/* Top accent bar */}
-                <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${skill.accent}, transparent)` }} />
+        {/* Skills Grid — 2×2 */}
+        <div className="skills-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mb-16 md:mb-24">
+          {skills.map((skill) => (
+            <div
+              key={skill.name}
+              className="skill-card group relative rounded-2xl overflow-hidden transition-all duration-500"
+              style={{
+                background: 'linear-gradient(135deg, rgba(24,24,27,0.9) 0%, rgba(9,9,11,0.95) 100%)',
+                border: `1px solid rgba(63,63,70,0.4)`,
+              }}
+            >
+              {/* Hover glow overlay */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+                style={{
+                  background: `radial-gradient(600px circle at 50% 0%, ${skill.accent}08, transparent 60%)`,
+                }}
+              />
 
-                <div className="flex flex-col justify-between h-full p-7 sm:p-8">
-                  {/* Header row */}
-                  <div className="flex items-start justify-between mb-5">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-11 h-11 rounded-xl flex items-center justify-center"
-                        style={{ background: `${skill.accent}18`, color: skill.accent, boxShadow: `0 0 20px ${skill.accent}15` }}
-                      >
-                        {skill.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-bold text-zinc-100 tracking-tight">{skill.name}</h3>
-                        <code className="text-[11px] font-mono text-zinc-600 block mt-0.5">{skill.tagline}</code>
-                      </div>
+              {/* Top accent line */}
+              <div
+                className="h-px w-full"
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${skill.accent}60, transparent)`,
+                }}
+              />
+
+              <div className="relative p-6 md:p-7 flex flex-col gap-4">
+                {/* Header */}
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
+                      style={{
+                        background: `${skill.accent}15`,
+                        color: skill.accent,
+                        boxShadow: `0 0 20px ${skill.accent}10`,
+                      }}
+                    >
+                      {skill.icon}
                     </div>
-                    {/* Status dot */}
-                    <div className="flex items-center gap-1.5 mt-1">
-                      <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: skill.accent, boxShadow: `0 0 8px ${skill.accent}` }} />
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">Active</span>
+                    <div>
+                      <h3 className="text-base md:text-lg font-bold text-zinc-100 tracking-tight">{skill.name}</h3>
+                      <code className="text-[10px] md:text-[11px] font-mono text-zinc-600 block mt-0.5">{skill.tagline}</code>
                     </div>
                   </div>
 
-                  {/* Description */}
-                  <p className="text-sm text-zinc-400 leading-relaxed mb-5">{skill.desc}</p>
-
-                  {/* Highlights */}
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {skill.highlights.map((h) => (
-                      <span
-                        key={h}
-                        className="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md"
-                        style={{ background: `${skill.accent}12`, color: skill.accent, border: `1px solid ${skill.accent}30` }}
-                      >
-                        {h}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Bottom toolbar */}
-                  <div className="flex items-center justify-between pt-4 border-t border-zinc-800/60">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {skill.tools.map((t) => (
-                        <span key={t} className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-500 border border-zinc-800/50">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="text-[10px] text-zinc-600 font-mono">click to swap →</span>
+                  {/* Status indicator */}
+                  <div className="flex items-center gap-1.5 mt-1 shrink-0">
+                    <span
+                      className="w-1.5 h-1.5 rounded-full animate-pulse"
+                      style={{ backgroundColor: skill.accent, boxShadow: `0 0 6px ${skill.accent}` }}
+                    />
+                    <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-600">Active</span>
                   </div>
                 </div>
-              </Card>
+
+                {/* Description */}
+                <p className="text-sm text-zinc-500 leading-relaxed">{skill.desc}</p>
+
+                {/* Highlights */}
+                <div className="flex flex-wrap gap-1.5">
+                  {skill.highlights.map((h) => (
+                    <span
+                      key={h}
+                      className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md"
+                      style={{
+                        background: `${skill.accent}10`,
+                        color: skill.accent,
+                        border: `1px solid ${skill.accent}20`,
+                      }}
+                    >
+                      {h}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Bottom tools */}
+                <div className="flex items-center gap-1.5 flex-wrap pt-3 border-t border-zinc-800/40">
+                  {skill.tools.map((t) => (
+                    <span key={t} className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900/80 text-zinc-500 border border-zinc-800/40">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Tech Tags — Auto-scrolling Marquee */}
+        <div className="marquee-container relative overflow-hidden py-6">
+          {/* Fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 md:w-32 z-10" style={{ background: 'linear-gradient(to right, #09090b, transparent)' }} />
+          <div className="absolute right-0 top-0 bottom-0 w-20 md:w-32 z-10" style={{ background: 'linear-gradient(to left, #09090b, transparent)' }} />
+
+          <div className="marquee-track flex gap-10 md:gap-16 items-center animate-marquee">
+            {marqueeLogos.map((tech, i) => (
+              <div
+                key={`${tech.name}-${i}`}
+                className="shrink-0 text-zinc-500 hover:text-zinc-200 transition-colors duration-300"
+                title={tech.name}
+              >
+                {tech.icon}
+              </div>
             ))}
-          </CardSwap>
+          </div>
         </div>
 
       </div>
