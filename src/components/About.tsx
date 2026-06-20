@@ -149,17 +149,17 @@ export function About() {
   const marqueeLogos = [...techLogos, ...techLogos];
 
   return (
-    <section id="about" ref={sectionRef} className="pt-24 md:pt-32 pb-12 md:pb-16 relative z-20">
+    <section id="about" ref={sectionRef} className="pt-12 md:pt-16 pb-12 md:pb-16 relative z-20">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Section Label */}
-        <div className="about-label flex items-center gap-3 mb-10">
-          <span className="w-8 h-px bg-emerald-500" />
-          <span className="text-xs font-mono uppercase tracking-[0.25em] text-emerald-400">About Me</span>
+        <div className="about-label flex items-center gap-4 mb-10 md:mb-16">
+          <span className="w-12 h-px bg-emerald-500" />
+          <span className="text-sm md:text-base font-mono font-semibold uppercase tracking-[0.25em] text-emerald-400">About Me</span>
         </div>
 
         {/* Intro: Heading + Description side by side on desktop */}
-        <div className="about-intro grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-20 md:mb-28">
+        <div className="about-intro grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 xl:gap-24 mb-20 md:mb-28">
 
           {/* Left — Profile Card */}
           <div className="about-heading-text relative flex items-center justify-center lg:justify-start">

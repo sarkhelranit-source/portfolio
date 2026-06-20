@@ -81,7 +81,7 @@ export function Credentials() {
     }, { scope: sectionRef });
 
     return (
-        <section id="credentials" ref={sectionRef} className="py-24 md:py-32 bg-zinc-950/50 relative overflow-hidden">
+        <section id="credentials" ref={sectionRef} className="pt-12 md:pt-16 pb-24 md:pb-32 relative overflow-hidden">
             <div className="max-w-5xl mx-auto px-6 md:px-12 relative z-10">
                 {/* Header and Toggle */}
                 <div className="cred-header flex flex-col items-center justify-center mb-16 space-y-6">

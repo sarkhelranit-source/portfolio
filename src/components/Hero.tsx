@@ -47,7 +47,7 @@ export function Hero() {
   }, { scope: sectionRef });
 
   return (
-    <section id="home" ref={sectionRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden z-10 pb-20">
+    <section id="home" ref={sectionRef} className="relative min-h-[85vh] flex items-center justify-center pt-20 overflow-hidden z-10">
 
       {/* Main content */}
       <div className="relative z-30 max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col items-center text-center pointer-events-none">
