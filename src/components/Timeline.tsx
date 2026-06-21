@@ -140,7 +140,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
             className="timeline-entry flex justify-start pt-10 md:pt-24 md:gap-4 lg:gap-8"
           >
             <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start md:w-64 lg:w-72 shrink-0">
-              <div className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-zinc-950 flex items-center justify-center">
+              <div className="h-10 absolute -left-1 md:left-3 w-10 rounded-full bg-zinc-950 flex items-center justify-center">
                 <div className="timeline-dot-inner h-4 w-4 rounded-full bg-zinc-800 border border-zinc-700 p-2" />
               </div>
               {item.logo ? (
@@ -154,7 +154,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
               )}
             </div>
 
-            <div className="timeline-entry-content relative pl-16 md:pl-4 w-full">
+            <div className="timeline-entry-content relative pl-12 md:pl-4 w-full">
               {item.logo ? (
                 <div className="md:hidden flex mb-6 w-full items-center justify-start">
                   <img src={item.logo} alt={item.title} className="w-auto h-auto max-w-[100px] max-h-[50px] object-contain opacity-80" />
@@ -172,7 +172,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
           style={{
             height: height + "px",
           }}
-          className="absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-zinc-700 to-transparent to-[99%]  [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] "
+          className="absolute md:left-8 left-4 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-zinc-700 to-transparent to-[99%]  [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] "
         >
           <motion.div
             style={{

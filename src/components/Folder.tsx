@@ -6,6 +6,7 @@ interface FolderProps {
   items?: React.ReactNode[];
   className?: string;
   onOpen?: () => void;
+  open?: boolean;
 }
 
 const darkenColor = (hex: string, percent: number): string => {
@@ -31,7 +32,8 @@ const Folder: React.FC<FolderProps> = ({
   size = 1,
   items = [],
   className = '',
-  onOpen
+  onOpen,
+  open: propOpen
 }) => {
   const maxItems = 3;
   const papers = items.slice(0, maxItems);
@@ -101,8 +103,8 @@ const Folder: React.FC<FolderProps> = ({
     return '';
   };
 
-  // Determine open state from hover
-  const open = hovered;
+  // Determine open state from hover or prop
+  const open = propOpen !== undefined ? (propOpen || hovered) : hovered;
 
   return (
     <div style={scaleStyle} className={className}>

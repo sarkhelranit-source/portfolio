@@ -87,7 +87,7 @@ export function Credentials() {
                 <div className="cred-header flex flex-col items-center justify-center mb-16 space-y-6">
                     <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-5 mt-2">
                         <h2 
-                            className={`cred-heading text-3xl sm:text-4xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${!isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
+                            className={`cred-heading text-2xl sm:text-3xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${!isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
                             onClick={() => setIsAppMode(false)}
                             style={{ cursor: 'pointer' }}
                         >
@@ -107,7 +107,7 @@ export function Credentials() {
                         </button>
                         
                         <h2 
-                            className={`cred-heading text-3xl sm:text-4xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
+                            className={`cred-heading text-2xl sm:text-3xl md:text-6xl font-display font-medium tracking-tight transition-colors duration-500 ${isAppMode ? 'text-zinc-100' : 'text-zinc-700'}`}
                             onClick={() => setIsAppMode(true)}
                             style={{ cursor: 'pointer' }}
                         >

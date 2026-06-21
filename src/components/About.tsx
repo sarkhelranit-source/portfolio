@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState, useEffect } from 'react';
 import { Shield, Cloud, Container, Bot } from 'lucide-react';
 import { FaAws, FaDocker, FaLinux, FaGitAlt, FaPython, FaFigma } from 'react-icons/fa';
 import { SiKubernetes, SiTerraform, SiNginx, SiRedis, SiN8N } from 'react-icons/si';
@@ -65,6 +65,16 @@ const techLogos = [
 
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const scrollToContact = useCallback(() => {
     const smoother = ScrollSmoother.get();
@@ -76,6 +86,13 @@ export function About() {
   }, []);
 
   useGSAP(() => {
+    const isMobileViewport = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+
+    if (isMobileViewport) {
+      // Return early on mobile to ensure all elements render natively and are 100% visible
+      return;
+    }
+
     // Section label
     gsap.from('.about-label', {
       y: 20,
@@ -91,9 +108,9 @@ export function About() {
 
     // Profile card reveal
     gsap.from('.about-heading-text', {
-      y: 60,
+      y: 40,
       opacity: 0,
-      duration: 1,
+      duration: 0.8,
       ease: 'power3.out',
       scrollTrigger: {
         trigger: '.about-intro',
@@ -104,10 +121,10 @@ export function About() {
 
     // Description paragraphs
     gsap.from('.about-desc-line', {
-      y: 30,
+      y: 20,
       opacity: 0,
-      stagger: 0.15,
-      duration: 0.8,
+      stagger: 0.1,
+      duration: 0.6,
       ease: 'power2.out',
       scrollTrigger: {
         trigger: '.about-description',
@@ -118,15 +135,15 @@ export function About() {
 
     // Skill cards stagger
     gsap.from('.skill-card', {
-      y: 60,
+      y: 30,
       opacity: 0,
-      scale: 0.95,
-      stagger: 0.12,
-      duration: 0.8,
+      scale: 0.98,
+      stagger: 0.05,
+      duration: 0.6,
       ease: 'power3.out',
       scrollTrigger: {
         trigger: '.skills-grid',
-        start: 'top 95%',
+        start: 'top 90%',
         toggleActions: 'play none none none',
       },
     });
@@ -134,8 +151,8 @@ export function About() {
     // Marquee fade-in
     gsap.from('.marquee-container', {
       opacity: 0,
-      y: 20,
-      duration: 0.8,
+      y: 10,
+      duration: 0.6,
       ease: 'power2.out',
       scrollTrigger: {
         trigger: '.marquee-container',
@@ -162,7 +179,10 @@ export function About() {
         <div className="about-intro grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 xl:gap-24 mb-20 md:mb-28">
 
           {/* Left — Profile Card */}
-          <div className="about-heading-text relative flex items-center justify-center lg:justify-start">
+          <div 
+            className="about-heading-text relative flex items-center justify-center lg:justify-start mx-auto lg:mx-0"
+            style={{ opacity: 1, visibility: 'visible', display: 'flex' }}
+          >
             <ProfileCard
               avatarUrl="/headshot.png"
               name="Ranit Sarkhel"
@@ -171,10 +191,10 @@ export function About() {
               status="Available for work"
               contactText="Contact"
               onContactClick={scrollToContact}
-              enableTilt={true}
+              enableTilt={!isMobile}
               behindGlowColor="rgba(82, 39, 255, 0.4)"
               innerGradient="linear-gradient(145deg, #1a1a2e8c 0%, #16213e44 100%)"
-              className="w-full max-w-[320px] lg:max-w-[360px]"
+              className="w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[360px]"
             />
           </div>
 
@@ -191,7 +211,7 @@ export function About() {
 
         {/* Skills Grid — 2×2 */}
         <div 
-          className="skills-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mb-16 md:mb-24"
+          className="skills-grid grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 mb-16 md:mb-24"
           onMouseMove={(e) => {
             for (const card of document.getElementsByClassName('skill-card-hover-wrapper')) {
               const rect = card.getBoundingClientRect();

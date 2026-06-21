@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -60,7 +60,18 @@ const projects = [
 export function Projects() {
   const containerRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
   const [expanded, setExpanded] = useState(false);
+  const [folderOpen, setFolderOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // GSAP entrance animations
   useGSAP(() => {
@@ -100,6 +111,20 @@ export function Projects() {
         toggleActions: 'play none none none',
       },
     });
+
+    // On mobile, automatically expand the folder when it enters the viewport
+    if (window.innerWidth < 768) {
+      ScrollTrigger.create({
+        trigger: '.folder-container',
+        start: 'top 80%',
+        onEnter: () => {
+          setFolderOpen(true);
+        },
+        onLeaveBack: () => {
+          setFolderOpen(false);
+        }
+      });
+    }
   }, { scope: containerRef });
 
   const handleFolderOpen = useCallback(() => {
@@ -168,7 +193,7 @@ export function Projects() {
             <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
             Portfolio
           </div>
-          
+
           <h2
             className="projects-title text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight mb-6"
             style={{ perspective: '600px' }}
@@ -180,15 +205,15 @@ export function Projects() {
               Work
             </span>
           </h2>
-          
+
           <p className="projects-subtitle text-zinc-400 text-lg md:text-xl max-w-2xl leading-relaxed">
             A curated collection of my recent engineering projects, focusing on deep automation, cloud security, and interactive digital experiences.
           </p>
+        </div>
 
-          {/* Floating Back Button (visible when expanded) */}
-          <div 
-            className={`absolute top-0 right-0 transition-opacity duration-500 ${expanded ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-          >
+        {/* Back to Folder button — placed outside header to avoid overlap */}
+        {expanded && (
+          <div className="flex justify-center mb-8 md:-mt-16">
             <button
               onClick={handleClose}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-800/80 hover:bg-zinc-700/80 border border-zinc-700 text-zinc-200 transition-all font-medium text-sm group/close backdrop-blur-md"
@@ -197,11 +222,11 @@ export function Projects() {
               Back to Folder
             </button>
           </div>
-        </div>
+        )}
 
         {/* Folder View */}
         {!expanded && (
-          <div className="folder-container flex items-center justify-center pt-32 pb-8 md:pt-48 md:pb-12 gap-4 md:gap-16 w-full">
+          <div className="folder-container flex flex-col md:flex-row items-center justify-center pt-20 pb-8 md:pt-48 md:pb-12 gap-4 md:gap-16 w-full">
             {/* Left Text */}
             <div className="hidden md:block">
               <GradientText
@@ -214,13 +239,14 @@ export function Projects() {
               </GradientText>
             </div>
 
-            {/* Center Folder — Wrapped in a container to reserve space since it scales up to 3x */}
-            <div className="w-[300px] h-[240px] flex items-center justify-center shrink-0 relative mt-10 md:mt-0">
+            {/* Center Folder */}
+            <div className="w-[200px] h-[160px] md:w-[300px] md:h-[240px] flex items-center justify-center shrink-0 relative">
               <Folder
-                size={3}
+                size={isMobile ? 1.8 : 3}
                 color="#5227FF"
                 items={paperItems}
                 onOpen={handleFolderOpen}
+                open={isMobile ? folderOpen : undefined}
               />
             </div>
 
@@ -237,16 +263,18 @@ export function Projects() {
             </div>
 
             {/* Mobile Text (visible only on small screens below folder) */}
-            <div className="md:hidden absolute bottom-8 left-1/2 -translate-x-1/2 w-full text-center">
-               <GradientText
-                colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-                animationSpeed={3}
-                showBorder={false}
-                className="text-sm font-display font-medium tracking-wide"
-              >
-                Tap to explore
-              </GradientText>
-            </div>
+            {isMobile && (
+              <div className="w-full text-center mt-6">
+                <GradientText
+                  colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+                  animationSpeed={3}
+                  showBorder={false}
+                  className="text-base font-display font-semibold tracking-wide"
+                >
+                  Tap to explore
+                </GradientText>
+              </div>
+            )}
           </div>
         )}
 
@@ -254,7 +282,7 @@ export function Projects() {
         {expanded && (
           <div
             ref={cardsRef}
-            className="grid grid-cols-1 md:grid-cols-2 gap-5 pb-8"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 pb-8"
             onMouseMove={(e) => {
               for (const card of document.getElementsByClassName('project-glow-wrapper')) {
                 const rect = card.getBoundingClientRect();
