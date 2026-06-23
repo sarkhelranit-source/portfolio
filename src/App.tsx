@@ -20,6 +20,7 @@ import { ScrollSmoother } from 'gsap/ScrollSmoother';
 const SplineHero = lazy(() => import('./components/SplineHero').then(m => ({ default: m.SplineHero })));
 const LiquidEther = lazy(() => import('../components/LiquidEther'));
 const DarkVeil = lazy(() => import('./components/DarkVeil'));
+import BlobCursor from './components/BlobCursor';
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
@@ -71,6 +72,27 @@ export default function App() {
   return (
     <>
       {/* Fixed elements — OUTSIDE the smooth wrapper so they don't get smoothed */}
+
+      {/* Blob Cursor - renders custom cursor effects globally */}
+      <BlobCursor
+        blobType="circle"
+        fillColor="#5227FF"
+        trailCount={3}
+        sizes={[27, 58, 36]}
+        innerSizes={[9, 16, 11]}
+        innerColor="rgba(255,255,255,0.8)"
+        opacities={[0.6, 0.6, 0.6]}
+        shadowColor="rgba(0,0,0,0.75)"
+        shadowBlur={5}
+        shadowOffsetX={10}
+        shadowOffsetY={10}
+        filterStdDeviation={12}
+        useFilter={true}
+        boxShadow="inset -5px -5px 15px rgba(0,0,0,0.4), inset 5px 5px 15px rgba(255,255,255,0.3), 0px 10px 20px rgba(0,0,0,0.6)"
+        fastDuration={0.02}
+        slowDuration={0.25}
+        zIndex={100}
+      />
 
       {/* Fixed DarkVeil background — always visible behind everything */}
       <div className="fixed inset-0 z-[-2] pointer-events-none">

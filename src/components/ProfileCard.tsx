@@ -628,10 +628,10 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                   className="font-semibold whitespace-nowrap mx-auto w-min"
                   style={{
                     position: 'relative',
-                    marginTop: isMobile ? '8px' : '0px',
-                    top: isMobile ? '0' : '-12px',
+                    marginTop: isMobile ? '16px' : '8px',
+                    top: '0px',
                     fontSize: isMobile ? '14px' : '16px',
-                    margin: isMobile ? '8px auto 0' : '0 auto',
+                    margin: isMobile ? '12px auto 0' : '8px auto 0',
                     backgroundImage: 'linear-gradient(to bottom, #fff, #4a4ac0)',
                     backgroundSize: '1em 1.5em',
                     WebkitTextFillColor: 'transparent',

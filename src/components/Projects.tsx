@@ -11,13 +11,13 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const projects = [
   {
-    id: 1,
-    title: 'AWS Security Incident Response',
-    category: 'AWS / Security',
+    id: 4,
+    title: 'Guess the Number Multiplayer',
+    category: 'Game / Cloud',
     image: '/projects/guess.png',
-    accent: '#10B981',
-    link: 'https://github.com/sarkhelranit-source/AWS-Incident-Response',
-    brief: "A serverless security solution built via AWS CloudFormation. It utilizes CloudTrail to monitor console access without MFA, leveraging EventBridge rules to trigger a real-time Lambda function. This automatically dispatches alerts down to SNS for immediate security personnel response, ensuring secure, compliant operational environments."
+    accent: '#FB923C',
+    link: 'https://github.com/sarkhelranit-source/Guess-The-Number',
+    brief: "A real-time multiplayer guessing game you can play right in your browser. Create a room, share the code with friends, and compete in three different modes: race to guess first, decode 'hot or cold' clues, or survive elimination rounds where the worst guess gets knocked out. No sign-up, no app to install — just open the link and play."
   },
   {
     id: 2,
@@ -47,13 +47,13 @@ const projects = [
     brief: "A sleek, integrated conversational AI agent for Telegram harnessing deep automation flows. Designed for robust user interactivity, context-aware command routing, and fluid data processing via third-party webhooks, empowering hyper-efficient personal server moderation."
   },
   {
-    id: 4,
-    title: 'Guess the Number Multiplayer',
-    category: 'Game / Cloud',
-    image: '/projects/guess.png',
-    accent: '#FB923C',
-    link: 'https://github.com/sarkhelranit-source/Guess-The-Number',
-    brief: "An intuitive web-based pass-and-play game engineered with pure HTML/JS for snappy real-time responsiveness. It intelligently captures player inputs, manages individual attempt tracking arrays, and resolves robust multiplayer conflict logic to crown the most strategic player."
+    id: 1,
+    title: 'AWS Security Incident Response',
+    category: 'AWS / Security',
+    image: '/projects/aws.png',
+    accent: '#10B981',
+    link: 'https://github.com/sarkhelranit-source/AWS-Incident-Response',
+    brief: "A serverless security solution built via AWS CloudFormation. It utilizes CloudTrail to monitor console access without MFA, leveraging EventBridge rules to trigger a real-time Lambda function. This automatically dispatches alerts down to SNS for immediate security personnel response, ensuring secure, compliant operational environments."
   }
 ];
 
@@ -193,7 +193,7 @@ export function Projects() {
     <section id="projects" className="pt-24 md:pt-32 pb-12 md:pb-16 font-sans relative" ref={containerRef}>
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Header */}
-        <div className="projects-header flex flex-col items-center text-center mb-16 md:mb-24 relative">
+        <div className="projects-header flex flex-col items-center text-center mb-16 md:mb-20 relative">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-zinc-300 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
             Portfolio
@@ -231,7 +231,7 @@ export function Projects() {
 
         {/* Folder View */}
         {!expanded && (
-          <div className="folder-container flex flex-col md:flex-row items-center justify-center pt-20 pb-8 md:pt-48 md:pb-12 gap-4 md:gap-16 w-full">
+          <div className="folder-container flex flex-col md:flex-row items-center justify-center pt-14 pb-8 md:pt-36 md:pb-12 gap-4 md:gap-16 w-full">
             {/* Left Text */}
             <div className="hidden md:block">
               <GradientText
