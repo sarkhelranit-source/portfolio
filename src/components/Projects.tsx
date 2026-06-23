@@ -14,7 +14,7 @@ const projects = [
     id: 1,
     title: 'AWS Security Incident Response',
     category: 'AWS / Security',
-    image: '/projects/aws.png',
+    image: '/projects/guess.png',
     accent: '#10B981',
     link: 'https://github.com/sarkhelranit-source/AWS-Incident-Response',
     brief: "A serverless security solution built via AWS CloudFormation. It utilizes CloudTrail to monitor console access without MFA, leveraging EventBridge rules to trigger a real-time Lambda function. This automatically dispatches alerts down to SNS for immediate security personnel response, ensuring secure, compliant operational environments."
@@ -63,6 +63,11 @@ export function Projects() {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
   const [expanded, setExpanded] = useState(false);
   const [folderOpen, setFolderOpen] = useState(false);
+  const [expandedBriefs, setExpandedBriefs] = useState<Record<number, boolean>>({});
+
+  const toggleBrief = (id: number) => {
+    setExpandedBriefs(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -372,9 +377,18 @@ export function Projects() {
                       </a>
                     </div>
 
-                    <p className="text-sm text-zinc-500 leading-relaxed line-clamp-3">
+                    <p className={`text-sm text-zinc-500 leading-relaxed ${expandedBriefs[project.id] ? '' : 'line-clamp-3'}`}>
                       {project.brief}
                     </p>
+                    {project.brief.length > 120 && (
+                      <button
+                        onClick={() => toggleBrief(project.id)}
+                        className="text-xs font-semibold self-start hover:underline focus:outline-none transition-colors"
+                        style={{ color: project.accent }}
+                      >
+                        {expandedBriefs[project.id] ? 'See Less' : 'See More'}
+                      </button>
+                    )}
 
                     {/* Bottom accent */}
                     <div className="mt-auto pt-3 border-t border-zinc-800/40 flex items-center gap-2">
