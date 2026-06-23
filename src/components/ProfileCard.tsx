@@ -559,23 +559,6 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                   }
                 >
                   <div className="flex items-center gap-3">
-                    <div
-                      className="rounded-full overflow-hidden border border-white/10 flex-shrink-0"
-                      style={{ width: '48px', height: '48px' }}
-                    >
-                      <img
-                        className="w-full h-full object-cover rounded-full"
-                        src={miniAvatarUrl || avatarUrl}
-                        alt={`${name || 'User'} mini avatar`}
-                        loading="lazy"
-                        style={{ display: 'block', gridArea: 'auto', borderRadius: '50%', pointerEvents: 'auto' }}
-                        onError={e => {
-                          const t = e.target as HTMLImageElement;
-                          t.style.opacity = '0.5';
-                          t.src = avatarUrl;
-                        }}
-                      />
-                    </div>
                     <div className="flex flex-col items-start gap-1">
                       <div className="text-xs md:text-sm font-medium text-white/90 leading-none truncate w-[90px] sm:w-auto">@{handle}</div>
                       <div className="text-[10px] md:text-sm text-white/70 leading-none">{status}</div>
