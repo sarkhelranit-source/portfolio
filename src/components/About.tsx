@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { useGSAP } from '@gsap/react';
 import ProfileCard from './ProfileCard';
+import LogoLoop from './LogoLoop';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,17 +51,17 @@ const skills = [
 ];
 
 const techLogos = [
-  { name: 'AWS', icon: <FaAws size={40} /> },
-  { name: 'Docker', icon: <FaDocker size={40} /> },
-  { name: 'Linux', icon: <FaLinux size={40} /> },
-  { name: 'n8n', icon: <SiN8N size={40} /> },
-  { name: 'Kubernetes', icon: <SiKubernetes size={40} /> },
-  { name: 'Git', icon: <FaGitAlt size={40} /> },
-  { name: 'UI/UX', icon: <FaFigma size={40} /> },
-  { name: 'Python', icon: <FaPython size={40} /> },
-  { name: 'Terraform', icon: <SiTerraform size={40} /> },
-  { name: 'Nginx', icon: <SiNginx size={40} /> },
-  { name: 'Redis', icon: <SiRedis size={40} /> },
+  { title: 'AWS', node: <FaAws size={40} /> },
+  { title: 'Docker', node: <FaDocker size={40} /> },
+  { title: 'Linux', node: <FaLinux size={40} /> },
+  { title: 'n8n', node: <SiN8N size={40} /> },
+  { title: 'Kubernetes', node: <SiKubernetes size={40} /> },
+  { title: 'Git', node: <FaGitAlt size={40} /> },
+  { title: 'UI/UX', node: <FaFigma size={40} /> },
+  { title: 'Python', node: <FaPython size={40} /> },
+  { title: 'Terraform', node: <SiTerraform size={40} /> },
+  { title: 'Nginx', node: <SiNginx size={40} /> },
+  { title: 'Redis', node: <SiRedis size={40} /> },
 ];
 
 export function About() {
@@ -161,9 +162,6 @@ export function About() {
       },
     });
   }, { scope: sectionRef });
-
-  // Duplicate tech tags for seamless infinite scroll
-  const marqueeLogos = [...techLogos, ...techLogos];
 
   return (
     <section id="about" ref={sectionRef} className="pt-12 md:pt-16 pb-12 md:pb-16 relative z-20">
@@ -327,17 +325,17 @@ export function About() {
 
         {/* Tech Tags — Auto-scrolling Marquee */}
         <div className="marquee-container relative overflow-hidden py-6">
-          <div className="marquee-track flex gap-10 md:gap-16 items-center animate-marquee">
-            {marqueeLogos.map((tech, i) => (
-              <div
-                key={`${tech.name}-${i}`}
-                className="shrink-0 text-zinc-500 hover:text-zinc-200 transition-colors duration-300"
-                title={tech.name}
-              >
-                {tech.icon}
-              </div>
-            ))}
-          </div>
+          <LogoLoop
+            logos={techLogos}
+            speed={60}
+            direction="left"
+            logoHeight={40}
+            gap={64}
+            hoverSpeed={20}
+            scaleOnHover
+            fadeOut
+            fadeOutColor="#000000"
+          />
         </div>
 
       </div>
