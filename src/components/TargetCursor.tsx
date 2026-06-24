@@ -76,7 +76,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   const moveCursor = useCallback((x: number, y: number) => {
     if (!cursorRef.current) return;
     const { x: offsetX, y: offsetY } = getContainingBlockOffset(containingBlockRef.current);
-    gsap.to(cursorRef.current, { x: x - offsetX, y: y - offsetY, duration: 0.1, ease: 'power3.out' });
+    gsap.set(cursorRef.current, { x: x - offsetX, y: y - offsetY });
   }, []);
 
   useEffect(() => {

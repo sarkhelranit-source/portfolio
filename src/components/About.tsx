@@ -208,27 +208,45 @@ export function About() {
         </div>
 
         {/* Skills Grid — 2×2 */}
-        <div 
-          className="skills-grid grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 mb-16 md:mb-24"
-          onMouseMove={(e) => {
-            for (const card of document.getElementsByClassName('skill-card-hover-wrapper')) {
-              const rect = card.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const y = e.clientY - rect.top;
-              (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
-              (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
-            }
-          }}
-        >
+        <div className="skills-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-16 md:mb-24">
           {skills.map((skill) => (
-            <div
-              key={skill.name}
-              className="skill-card skill-card-hover-wrapper group relative rounded-2xl transition-all duration-500 p-[1px]"
-              style={{
-                backgroundColor: 'rgba(63,63,70,0.4)',
-              }}
-            >
-              {/* Border hover glow */}
+            <div key={skill.name} className="skill-card h-full">
+              <div
+                className="group relative rounded-2xl p-[1px] cursor-crosshair h-full"
+                style={{
+                  background: `linear-gradient(135deg, rgba(63,63,70,0.5), rgba(24,24,27,0.8))`,
+                  transform: 'perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale3d(1, 1, 1)',
+                  transformStyle: 'preserve-3d',
+                  transition: 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)',
+                }}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  
+                  e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+                  e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+
+                  const centerX = rect.width / 2;
+                  const centerY = rect.height / 2;
+                  
+                  const rotateX = ((y - centerY) / centerY) * -6;
+                  const rotateY = ((x - centerX) / centerX) * 6;
+                  
+                  e.currentTarget.style.setProperty('--rotate-x', `${rotateX}deg`);
+                  e.currentTarget.style.setProperty('--rotate-y', `${rotateY}deg`);
+                  e.currentTarget.style.transition = 'none';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.setProperty('--rotate-x', `0deg`);
+                  e.currentTarget.style.setProperty('--rotate-y', `0deg`);
+                  e.currentTarget.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transition = 'transform 0.1s cubic-bezier(0.23, 1, 0.32, 1)';
+                }}
+              >
+              {/* Colored glowing border tracking mouse */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
                 style={{
@@ -236,86 +254,119 @@ export function About() {
                 }}
               />
 
-              {/* Inner content wrapper */}
+              {/* Inner 3D container */}
               <div 
-                className="relative h-full w-full rounded-2xl overflow-hidden flex flex-col"
+                className="relative h-full w-full rounded-2xl overflow-hidden flex flex-col backdrop-blur-md border border-white/5 shadow-2xl"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(24,24,27,0.9) 0%, rgba(9,9,11,0.95) 100%)',
+                  backgroundColor: 'rgba(8, 8, 12, 0.8)',
+                  backgroundImage: `
+                    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+                  `,
+                  backgroundSize: '30px 30px',
+                  backgroundPosition: 'center center',
+                  transformStyle: 'preserve-3d',
+                  transform: 'translateZ(10px)',
                 }}
               >
+                {/* Holographic Glare */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
+                  style={{
+                    background: `radial-gradient(
+                      circle at var(--mouse-x, 0) var(--mouse-y, 0), 
+                      rgba(255,255,255,0.12) 0%, 
+                      transparent 60%
+                    )`,
+                    mixBlendMode: 'overlay',
+                    transform: 'translateZ(30px)',
+                  }}
+                />
+
                 {/* Inner hover glow overlay */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: `radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), ${skill.accent}0A, transparent 60%)`,
+                    background: `radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), ${skill.accent}15, transparent 60%)`,
+                    transform: 'translateZ(1px)',
                   }}
                 />
 
-                {/* Top accent line */}
+                {/* Top accent neon line */}
                 <div
-                  className="h-px w-full shrink-0"
+                  className="absolute top-0 left-0 w-full h-[2px] opacity-60 pointer-events-none"
                   style={{
-                    background: `linear-gradient(90deg, transparent, ${skill.accent}60, transparent)`,
+                    background: `linear-gradient(90deg, transparent, ${skill.accent}, transparent)`,
+                    transform: 'translateZ(15px)',
                   }}
                 />
 
-                <div className="relative p-6 md:p-7 flex flex-col gap-4 grow">
-                {/* Header */}
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
-                      style={{
-                        background: `${skill.accent}15`,
-                        color: skill.accent,
-                        boxShadow: `0 0 20px ${skill.accent}10`,
-                      }}
-                    >
-                      {skill.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-base md:text-lg font-bold text-zinc-100 tracking-tight">{skill.name}</h3>
-                      <code className="text-[10px] md:text-[11px] font-mono text-zinc-600 block mt-0.5">{skill.tagline}</code>
+                <div 
+                  className="relative p-6 md:p-8 flex flex-col gap-5 grow z-10"
+                  style={{ transform: 'translateZ(20px)', transformStyle: 'preserve-3d' }}
+                >
+                  {/* Header */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg"
+                        style={{
+                          background: `linear-gradient(135deg, ${skill.accent}20, rgba(0,0,0,0.5))`,
+                          color: skill.accent,
+                          border: `1px solid ${skill.accent}40`,
+                          boxShadow: `0 0 20px ${skill.accent}20, inset 0 0 10px ${skill.accent}10`,
+                          transform: 'translateZ(40px)',
+                        }}
+                      >
+                        {skill.icon}
+                      </div>
+                      <div style={{ transform: 'translateZ(30px)' }}>
+                        <h3 className="text-lg md:text-xl font-bold text-white tracking-tight drop-shadow-md">{skill.name}</h3>
+                        <code className="text-xs font-mono text-zinc-400 block mt-1 drop-shadow-sm">{skill.tagline}</code>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Status indicator */}
-                  <div className="flex items-center gap-1.5 mt-1 shrink-0">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full animate-pulse"
-                      style={{ backgroundColor: skill.accent, boxShadow: `0 0 6px ${skill.accent}` }}
-                    />
-                    <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-600">Active</span>
+                  {/* Description */}
+                  <p 
+                    className="text-sm md:text-base text-zinc-400 leading-relaxed font-light mt-2"
+                    style={{ transform: 'translateZ(15px)' }}
+                  >
+                    {skill.desc}
+                  </p>
+
+                  {/* Bottom tags */}
+                  <div 
+                    className="flex flex-col gap-4 mt-auto pt-4 border-t border-zinc-800/40"
+                    style={{ transform: 'translateZ(25px)', transformStyle: 'preserve-3d' }}
+                  >
+                    {/* Highlights */}
+                    <div className="flex flex-wrap gap-2">
+                      {skill.highlights.map((h) => (
+                        <span
+                          key={h}
+                          className="text-[10px] md:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm"
+                          style={{
+                            background: `linear-gradient(135deg, ${skill.accent}20, transparent)`,
+                            color: skill.accent,
+                            border: `1px solid ${skill.accent}30`,
+                            textShadow: `0 0 10px ${skill.accent}40`,
+                          }}
+                        >
+                          {h}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Tools */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {skill.tools.map((t) => (
+                        <span key={t} className="text-[10px] md:text-xs font-mono px-2.5 py-1 rounded bg-black/50 text-zinc-300 border border-zinc-800/60 backdrop-blur-sm">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-sm text-zinc-500 leading-relaxed">{skill.desc}</p>
-
-                {/* Highlights */}
-                <div className="flex flex-wrap gap-1.5">
-                  {skill.highlights.map((h) => (
-                    <span
-                      key={h}
-                      className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md"
-                      style={{
-                        background: `${skill.accent}10`,
-                        color: skill.accent,
-                        border: `1px solid ${skill.accent}20`,
-                      }}
-                    >
-                      {h}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Bottom tools */}
-                <div className="flex items-center gap-1.5 flex-wrap pt-3 border-t border-zinc-800/40">
-                  {skill.tools.map((t) => (
-                    <span key={t} className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900/80 text-zinc-500 border border-zinc-800/40">
-                      {t}
-                    </span>
-                  ))}
                 </div>
               </div>
             </div>
@@ -334,7 +385,6 @@ export function About() {
             hoverSpeed={20}
             scaleOnHover
             fadeOut
-            fadeOutColor="#000000"
           />
         </div>
 
